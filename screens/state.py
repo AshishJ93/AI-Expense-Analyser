@@ -32,6 +32,7 @@ from services.subscription_detector import detect_recurring
 def init_state() -> None:
     defaults = {
         "stage": "onboard",
+        "entered": False,
         "page": "Overview",
         "transactions": None,
         "notes": [],

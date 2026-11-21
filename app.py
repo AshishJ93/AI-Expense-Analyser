@@ -16,6 +16,7 @@ from screens.state import init_state
 from screens.think import render_think
 from screens.transactions import render_transactions
 from screens.upload import render_upload
+from screens.welcome import render_welcome
 
 load_dotenv()
 
@@ -31,6 +32,18 @@ def main() -> None:
     )
     inject_css()
     init_state()
+
+    if st.query_params.get("enter") == "1":
+        st.session_state.entered = True
+
+    show_tour = (
+        st.session_state.transactions is None
+        and not st.session_state.get("entered")
+        and not st.session_state.get("replacing")
+    )
+    if show_tour:
+        render_welcome()
+        return
 
     if st.session_state.stage != "ready" or st.session_state.transactions is None:
         render_upload()

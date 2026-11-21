@@ -3,16 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpendWise — See the month that moved</title>
-  <meta name="description" content="Open a fictional demo or your own statement. See the total, the month that moved, one decision, daily spikes, recurring bills, a written briefing, and a report. Card numbers are masked and never stored.">
-  <!-- After you deploy, change every href of APP below to your Streamlit URL. -->
+  <title>SpendWise — Every feature, before you upload</title>
+  <meta name="description" content="A tour of SpendWise: the demo, the total, the month that moved, one decision, four lenses, categories, merchants, a briefing, and reports. Open the app when you want to upload.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233F5E4E'/%3E%3Cpath d='M8 18.5c2.2-4 4.2-6 6.2-6s3.2 3.2 5.2 3.2 3.4-5.2 4.6-7.2' fill='none' stroke='%23F7F4EE' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,560;1,9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,520;0,9..144,560;1,9..144,520&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --paper: #f6f1ea;
+    .stApp:has(.sw-web) [data-testid="stHeader"],
+    .stApp:has(.sw-web) [data-testid="stToolbar"],
+    .stApp:has(.sw-web) [data-testid="stDecoration"],
+    .stApp:has(.sw-web) [data-testid="stSidebar"],
+    .stApp:has(.sw-web) footer { display: none !important; }
+    .stApp:has(.sw-web) .block-container { max-width: none !important; padding: 0 !important; }
+    .stApp:has(.sw-web),
+    .stApp:has(.sw-web) [data-testid="stMain"] { background: #f4efe6 !important; }
+
+    .sw-web {
       --ink: #1c1b19;
       --body: #5c564e;
       --muted: #8a847c;
@@ -20,640 +27,339 @@
       --moss: #3f5e4e;
       --moss-deep: #2c4538;
       --cream: #fffaf6;
+      --paper: #f4efe6;
       --up: #8e3b3b;
-      --serif: "Fraunces", "Iowan Old Style", Palatino, serif;
+      --serif: "Fraunces", Palatino, serif;
       --sans: "Outfit", "Segoe UI", sans-serif;
-      --app: "http://localhost:8523";
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--paper); scroll-padding-top: 72px; }
-    body {
       margin: 0;
       color: var(--ink);
       font-family: var(--sans);
-      font-weight: 400;
-      line-height: 1.5;
       background:
-        radial-gradient(ellipse 48% 36% at 0% 8%, rgba(168, 186, 166, 0.45), transparent 68%),
-        radial-gradient(ellipse 40% 32% at 100% 0%, rgba(232, 214, 184, 0.55), transparent 66%),
-        radial-gradient(ellipse 42% 30% at 80% 100%, rgba(63, 94, 78, 0.12), transparent 70%),
+        radial-gradient(ellipse 46% 34% at 0% 0%, rgba(176, 196, 174, 0.55), transparent 68%),
+        radial-gradient(ellipse 40% 30% at 100% 8%, rgba(236, 214, 176, 0.5), transparent 66%),
         var(--paper);
-      overflow-wrap: break-word;
+      min-height: 100vh;
     }
-    button, a { font: inherit; color: inherit; }
-    ::selection { background: var(--moss); color: #f7f4ee; }
-    :focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
-    .skip {
-      position: absolute; left: 1rem; top: -4rem; z-index: 80;
-      background: var(--cream); color: var(--ink); padding: 0.5rem 0.8rem;
-    }
-    .skip:focus { top: 0.6rem; }
-    .scrub {
-      position: fixed; top: 0; left: 0; height: 2px; width: 0;
-      background: var(--moss); z-index: 65; pointer-events: none;
-    }
-    .topbar {
-      position: fixed; inset: 0 0 auto 0; z-index: 40;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px; padding: 0 4vw; gap: 1rem;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    .topbar.is-solid {
-      background: rgba(246, 241, 234, 0.9);
+    .sw-web * { box-sizing: border-box; }
+    .sw-web a { color: inherit; }
+    .sw-web button, .sw-web a { font: inherit; }
+    .sw-web :focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
+
+    .sw-bar {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      height: 68px; padding: 0 4vw;
+      background: rgba(244, 239, 230, 0.86);
       backdrop-filter: blur(16px);
-      box-shadow: 0 1px 0 var(--line);
+      border-bottom: 1px solid transparent;
     }
-    .mark { text-decoration: none; font-weight: 500; letter-spacing: -0.02em; }
-    .mark em { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--moss); }
-    .top-links { display: flex; align-items: center; gap: 0.35rem; }
-    .top-links a.quiet {
-      text-decoration: none; font-size: 0.92rem; color: var(--body); padding: 0.45rem 0.7rem; border-radius: 999px;
+    .sw-web.is-scrolled .sw-bar { border-bottom-color: var(--line); }
+    .sw-mark { text-decoration: none; font-weight: 500; letter-spacing: -0.03em; font-size: 1.05rem; }
+    .sw-mark em { font-family: var(--serif); font-style: italic; color: var(--moss); }
+    .sw-bar nav { display: flex; align-items: center; gap: 0.2rem; }
+    .sw-bar nav a.quiet {
+      text-decoration: none; color: var(--body); padding: 0.45rem 0.7rem; border-radius: 999px; font-size: 0.92rem;
     }
-    .top-links a.quiet:hover { background: rgba(28, 27, 25, 0.05); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-      text-decoration: none; background: var(--moss); color: #f7f4ee;
-      border-radius: 999px; padding: 0.92rem 1.25rem; border: 1px solid transparent;
-      letter-spacing: -0.01em; box-shadow: 0 12px 28px rgba(63, 94, 78, 0.22);
+    .sw-bar nav a.quiet:hover { background: rgba(28, 27, 25, 0.05); }
+    .sw-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; background: var(--moss); color: #f7f4ee !important;
+      border-radius: 999px; padding: 0.85rem 1.15rem; border: 1px solid transparent;
+      box-shadow: 0 10px 26px rgba(63, 94, 78, 0.22);
       transition: transform 0.2s ease, background 0.2s ease;
     }
-    .btn:hover { background: var(--moss-deep); transform: translateY(-1px); }
-    .btn.slim { padding: 0.55rem 0.95rem; font-size: 0.92rem; box-shadow: none; }
-    .btn.ghost {
-      background: transparent; color: var(--ink); border-color: rgba(28, 27, 25, 0.2); box-shadow: none;
+    .sw-btn:hover { background: var(--moss-deep); transform: translateY(-1px); }
+    .sw-btn.slim { padding: 0.5rem 0.9rem; box-shadow: none; font-size: 0.92rem; }
+    .sw-btn.ghost {
+      background: transparent; color: var(--ink) !important; border-color: rgba(28, 27, 25, 0.18); box-shadow: none;
     }
-    .btn.ghost:hover { background: rgba(28, 27, 25, 0.04); transform: none; }
 
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 7.2rem 1.4rem 2.4rem; position: relative; overflow: hidden;
+    .sw-hero {
+      display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 3vw; align-items: center;
+      width: min(1180px, calc(100% - 8vw));
+      margin: 0 auto; padding: 2.2rem 0 3rem;
     }
-    .hero::before {
-      content: ""; position: absolute; inset: -10%;
-      background:
-        radial-gradient(ellipse 46% 38% at 12% 18%, rgba(176, 196, 174, 0.55), transparent 64%),
-        radial-gradient(ellipse 40% 34% at 88% 10%, rgba(236, 214, 176, 0.5), transparent 66%);
-      animation: drift 22s ease-in-out infinite alternate;
+    .sw-kicker {
+      margin: 0 0 0.9rem; letter-spacing: 0.16em; text-transform: uppercase;
+      font-size: 0.74rem; color: var(--moss); font-weight: 600;
     }
-    .hero > * { position: relative; z-index: 1; }
-    @keyframes drift { to { transform: scale(1.05) translate3d(1%, -2%, 0); } }
-    .kicker {
-      display: inline-flex; align-items: center; gap: 0.55rem; margin: 0 0 1.3rem;
-      font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
-    }
-    .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--moss); }
-    h1 {
+    .sw-hero h1 {
       margin: 0; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(3.2rem, 7.4vw, 7.1rem); line-height: 0.9; letter-spacing: -0.045em;
+      font-size: clamp(3rem, 5.6vw, 5.4rem); line-height: 0.92; letter-spacing: -0.045em;
     }
-    h1 span { display: block; animation: rise 0.9s both; }
-    h1 span:nth-child(2) { animation-delay: 0.08s; }
-    h1 span:nth-child(3) { animation-delay: 0.16s; }
-    h1 em { font-style: italic; font-weight: 500; color: var(--moss); }
-    @keyframes rise { from { transform: translateY(12px); } to { transform: none; } }
-    .lede {
-      max-width: 40rem; margin: 1.45rem auto 0; font-size: 1.14rem; font-weight: 300; color: var(--body);
-      animation: rise 0.9s 0.24s both;
-    }
-    .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center; margin-top: 1.7rem; animation: rise 0.9s 0.32s both; }
-    .spec {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.45rem;
-      list-style: none; padding: 0; margin: 3.2rem 0 0; max-width: 46rem;
-      animation: rise 0.9s 0.4s both;
-    }
-    .spec a {
-      text-decoration: none; border: 1px solid var(--line); background: rgba(255, 250, 246, 0.7);
-      border-radius: 999px; padding: 0.42rem 0.75rem; font-size: 0.78rem; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--body);
-      transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
-    }
-    .spec a:hover { border-color: var(--moss); color: var(--ink); transform: translateY(-1px); background: var(--cream); }
+    .sw-hero h1 em { font-style: italic; font-weight: 520; color: var(--moss); }
+    .sw-lede { margin: 1.1rem 0 0; max-width: 36rem; color: var(--body); font-weight: 300; font-size: 1.12rem; }
+    .sw-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.4rem; }
+    .sw-note { margin: 0.9rem 0 0; color: var(--muted); font-size: 0.88rem; }
 
-    .bridge {
-      padding: 12vh 6vw; background:
-        radial-gradient(ellipse 46% 40% at 50% 0%, rgba(176, 196, 174, 0.35), transparent 64%),
-        #efe7dc;
+    .sw-stage { min-width: 0; }
+    .sw-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .sw-pills button {
+      border: 1px solid var(--line); background: rgba(255, 250, 246, 0.8); color: var(--ink);
+      border-radius: 999px; padding: 0.42rem 0.72rem; cursor: pointer;
     }
-    .bridge ol {
-      list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-      margin: 0 auto; padding: 0; width: min(1100px, 100%);
+    .sw-pills button[aria-selected="true"] { background: var(--ink); color: #f7f4ee; border-color: var(--ink); }
+    .sw-device {
+      background: var(--cream); border: 1px solid var(--line); border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(60, 48, 32, 0.08);
+      padding: 1.15rem 1.2rem 1.2rem; min-height: 360px;
+      transition: transform 0.35s ease;
     }
-    .bridge .num { display: block; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.7rem; }
-    .bridge strong {
-      display: block; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(3.1rem, 6.4vw, 5.6rem); letter-spacing: -0.045em; line-height: 0.9;
+    .sw-device:hover { transform: translateY(-3px); }
+    .sw-device-top { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 0.8rem; }
+    .sw-live {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--moss); font-weight: 600;
     }
-    .bridge p { margin: 0.85rem 0 0; max-width: 22rem; color: var(--body); font-weight: 300; }
-    .bridge-note { width: min(1100px, 100%); margin: 3rem auto 0; color: var(--muted); font-size: 0.92rem; }
-
-    .film { position: relative; }
-    .panel {
-      width: min(1100px, calc(100% - 8vw));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 3.2vw;
-      align-items: center;
-      padding: 4.4rem 0;
-      border-top: 1px solid var(--line);
+    .sw-live i {
+      width: 8px; height: 8px; border-radius: 99px; background: var(--moss);
+      animation: sw-pulse 1.6s ease-in-out infinite;
     }
-    .idx { margin: 0 0 0.7rem; font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--moss); }
-    .panel h2, .forge h2, .close h2 {
-      font-family: var(--serif); font-weight: 560; letter-spacing: -0.035em; line-height: 1.02; margin: 0 0 0.85rem;
+    @keyframes sw-pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
+    .sw-scene h2 {
+      margin: 0.15rem 0 0.45rem; font-family: var(--serif); font-weight: 560;
+      font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.03em; line-height: 1.05;
     }
-    .panel h2 { font-size: clamp(2.2rem, 3.6vw, 3.5rem); }
-    .body { margin: 0; max-width: 34rem; color: var(--body); font-weight: 300; font-size: 1.05rem; }
-    .go { margin-top: 1.15rem; }
-
-    .card {
-      background: var(--cream); border: 1px solid var(--line); border-radius: 22px;
-      box-shadow: 0 18px 40px rgba(60, 48, 32, 0.06);
+    .sw-scene p { margin: 0; color: var(--body); font-weight: 300; line-height: 1.5; }
+    .sw-web.is-live .sw-scene { display: none; }
+    .sw-web.is-live .sw-scene.is-on { display: block; animation: sw-in 0.35s ease; }
+    @keyframes sw-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .sw-figure {
+      margin: 0.35rem 0 0.2rem; font-family: var(--serif); font-weight: 560;
+      font-size: clamp(2.8rem, 5vw, 4.2rem); letter-spacing: -0.045em; line-height: 0.92;
     }
-    .doors { display: grid; gap: 0.75rem; }
-    .door { padding: 1.15rem 1.2rem 1.2rem; transition: transform 0.2s ease, border-color 0.2s ease; }
-    .door:hover { transform: translateY(-2px); border-color: rgba(63, 94, 78, 0.4); }
-    .door em { display: block; font-style: normal; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--moss); }
-    .door strong { display: block; margin-top: 0.35rem; font-family: var(--serif); font-size: 1.7rem; font-weight: 560; letter-spacing: -0.03em; }
-    .door p { margin: 0.35rem 0 0; color: var(--body); font-weight: 300; }
-
-    .stage-card { padding: 1.3rem 1.35rem 1.2rem; }
-    .figure {
-      margin: 0.2rem 0 0.15rem; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(3rem, 6vw, 4.6rem); letter-spacing: -0.045em; line-height: 0.92;
+    .sw-up { color: var(--up); }
+    .sw-bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem; align-items: end; height: 120px; margin-top: 1rem; }
+    .sw-bars span { display: block; border-radius: 8px 8px 3px 3px; background: rgba(63, 94, 78, 0.28); height: var(--h); }
+    .sw-bars span.on { background: var(--moss); }
+    .sw-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-top: 0.9rem; }
+    .sw-mini article, .sw-row {
+      background: #f7f3ec; border-radius: 16px; padding: 0.75rem 0.8rem;
     }
-    .meta { margin: 0; color: var(--muted); font-size: 0.92rem; font-weight: 300; }
-    .signal {
-      margin-top: 1rem; display: flex; justify-content: space-between; gap: 1rem; align-items: flex-end;
-      padding-top: 0.9rem; border-top: 1px solid var(--line);
+    .sw-mini em, .sw-row em {
+      display: block; font-style: normal; font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
     }
-    .signal b { display: block; font-family: var(--serif); font-size: 2rem; letter-spacing: -0.04em; color: var(--up); font-weight: 560; }
-    .signal span { color: var(--muted); font-size: 0.85rem; }
-
-    .bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.45rem; align-items: end; height: 140px; margin-top: 1.1rem; }
-    .bars button {
-      border: 0; background: transparent; padding: 0; cursor: pointer; height: 100%;
-      display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 0.35rem;
-    }
-    .bars i {
-      display: block; width: 100%; border-radius: 8px 8px 3px 3px; background: rgba(63, 94, 78, 0.28);
-      height: var(--h); transform-origin: bottom; transform: scaleY(0.2);
-      transition: transform 0.7s ease, background 0.2s ease;
-    }
-    .bars.is-in i { transform: scaleY(1); }
-    .bars button[aria-pressed="true"] i, .bars button:hover i { background: var(--moss); }
-    .bars small { color: var(--muted); font-size: 0.68rem; letter-spacing: 0.06em; }
-    .month-read { margin: 0.8rem 0 0; min-height: 1.4em; color: var(--body); font-weight: 300; }
-
-    .lenses { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.85rem; }
-    .lenses button {
-      flex: 1 1 120px; border-radius: 999px; border: 1px solid var(--line); background: var(--cream);
-      padding: 0.55rem 0.7rem; cursor: pointer;
-    }
-    .lenses button[aria-selected="true"] { background: var(--ink); color: #f7f4ee; border-color: var(--ink); }
-    .lens-pane { display: none; }
-    .lens-pane.is-on { display: block; }
-    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
-    .stat { padding: 0.85rem 0.8rem; }
-    .stat em { display: block; font-style: normal; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-    .stat strong { display: block; margin-top: 0.3rem; font-size: 1.15rem; letter-spacing: -0.03em; }
-    .subs { list-style: none; margin: 0; padding: 0; }
-    .subs li {
+    .sw-mini strong { display: block; margin-top: 0.25rem; font-size: 1.05rem; }
+    .sw-list { list-style: none; margin: 0.8rem 0 0; padding: 0; }
+    .sw-list li {
       display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
-      padding: 0.7rem 0; border-top: 1px solid var(--line);
+      padding: 0.55rem 0; border-top: 1px solid var(--line);
     }
-    .subs strong { display: block; font-weight: 500; }
-    .subs span { display: block; margin-top: 0.15rem; color: var(--muted); font-size: 0.82rem; }
-    .subs b { font-family: var(--serif); font-weight: 560; font-size: 1.15rem; }
+    .sw-list b { font-family: var(--serif); font-weight: 560; }
+    .sw-progress { height: 2px; background: rgba(28, 27, 25, 0.08); margin-top: 1rem; border-radius: 99px; overflow: hidden; }
+    .sw-progress i { display: block; height: 100%; width: 0; background: var(--moss); }
+    .sw-web.is-live .sw-progress i { width: 100%; animation: sw-load 4.2s linear; }
+    @keyframes sw-load { from { width: 0; } to { width: 100%; } }
 
-    .brief { padding: 1.2rem 1.25rem; }
-    .pill {
-      display: inline-flex; border-radius: 999px; padding: 0.16rem 0.55rem;
-      background: rgba(63, 94, 78, 0.12); color: var(--moss);
-      font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    .sw-atlas { width: min(1180px, calc(100% - 8vw)); margin: 0 auto; padding: 1rem 0 4rem; }
+    .sw-atlas h2 {
+      font-family: var(--serif); font-weight: 560; font-size: clamp(2.2rem, 4vw, 3.4rem);
+      letter-spacing: -0.04em; margin: 0 0 0.4rem;
     }
-    .brief h3 { margin: 0.7rem 0 0.4rem; font-size: 1.25rem; letter-spacing: -0.03em; }
-    .brief p { margin: 0; color: var(--body); font-weight: 300; }
+    .sw-atlas > p { margin: 0 0 1.2rem; color: var(--body); font-weight: 300; max-width: 40rem; }
+    .sw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+    .sw-grid button {
+      text-align: left; cursor: pointer; border: 1px solid var(--line); background: var(--cream);
+      border-radius: 22px; padding: 1rem 1rem 0.95rem; min-height: 168px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .sw-grid button:hover, .sw-grid button[aria-pressed="true"] {
+      transform: translateY(-3px); border-color: rgba(63, 94, 78, 0.45);
+    }
+    .sw-grid em {
+      display: block; font-style: normal; color: var(--moss); font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    }
+    .sw-grid strong { display: block; margin: 0.4rem 0 0.3rem; font-size: 1.12rem; letter-spacing: -0.02em; }
+    .sw-grid span { display: block; color: var(--body); font-weight: 300; font-size: 0.92rem; line-height: 1.4; }
 
-    .files { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-    .file { padding: 1.1rem 1rem 1rem; text-decoration: none; display: block; transition: transform 0.2s ease; }
-    .file:hover { transform: translateY(-2px); }
-    .file em { font-style: normal; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--moss); }
-    .file strong { display: block; margin: 0.4rem 0 0.25rem; font-family: var(--serif); font-size: 1.45rem; font-weight: 560; }
-    .file p { margin: 0; color: var(--body); font-weight: 300; font-size: 0.92rem; }
-
-    .mask-row {
-      display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-top: 1px solid var(--line);
-    }
-    .mask-row span { color: var(--muted); }
-    .kept { color: var(--moss); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
-
-    .rail {
-      position: fixed; right: 16px; top: 50%; transform: translateY(-50%); z-index: 35;
-      display: flex; flex-direction: column; gap: 2px;
-    }
-    .rail button {
-      width: 28px; height: 22px; border: 0; background: transparent; padding: 0; cursor: pointer; position: relative;
-    }
-    .rail button::before {
-      content: ""; display: block; width: 7px; height: 7px; margin-left: auto; border-radius: 99px;
-      background: rgba(28, 27, 25, 0.28);
-    }
-    .rail button[aria-current="true"]::before { height: 16px; background: var(--moss); }
-    .rail button span {
-      position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
-      white-space: nowrap; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
-      background: var(--cream); border-radius: 999px; padding: 0.22rem 0.5rem; opacity: 0;
-      box-shadow: 0 8px 20px rgba(28, 27, 25, 0.08);
-    }
-    .rail button:hover span, .rail button:focus-visible span, .rail button[aria-current="true"] span { opacity: 1; }
-
-    .forge { padding: 8vh 6vw 10vh; }
-    .forge-grid {
-      width: min(1040px, 100%); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4vw;
-    }
-    .forge h2 { font-size: clamp(2.3rem, 4vw, 3.6rem); }
-    .checks { list-style: none; margin: 0; padding: 0; }
-    .checks li {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.72rem 0;
-      border-top: 1px solid var(--line); opacity: 0.35; transition: opacity 0.4s ease;
-    }
-    .tick {
-      width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(28, 27, 25, 0.22);
-      display: grid; place-items: center; font-size: 0.72rem; color: transparent; flex: none;
-    }
-    .forge.is-in .checks li { opacity: 1; }
-    .forge.is-in .tick { background: var(--moss); border-color: var(--moss); color: #f7f4ee; }
-
-    .close {
-      min-height: 92vh; display: flex; flex-direction: column; align-items: center; text-align: center;
-      padding: 7rem 1.4rem 1.4rem;
+    .sw-close {
+      text-align: center; padding: 5rem 1.4rem 2rem;
       background:
-        radial-gradient(ellipse 46% 40% at 50% 30%, rgba(176, 196, 174, 0.4), transparent 68%),
+        radial-gradient(ellipse 46% 40% at 50% 30%, rgba(176, 196, 174, 0.45), transparent 68%),
         #efe6da;
     }
-    .close h2 { font-size: clamp(3rem, 6.6vw, 5.8rem); line-height: 0.94; letter-spacing: -0.04em; }
-    .close .lede { margin-top: 0; }
-    .close .url { margin-top: 1rem; color: var(--muted); text-decoration: none; }
-    footer {
-      align-self: stretch; width: min(1100px, 100%); margin: auto auto 0; padding-top: 2.5rem;
-      display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--line);
-      color: var(--muted); font-size: 0.88rem;
+    .sw-close h2 {
+      margin: 0.3rem 0 0.8rem; font-family: var(--serif); font-weight: 560;
+      font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: -0.045em; line-height: 0.95;
     }
-    footer a { color: inherit; }
+    .sw-close p { margin: 0 auto; max-width: 34rem; color: var(--body); font-weight: 300; }
+    .sw-close .sw-actions { justify-content: center; }
+    .sw-foot {
+      width: min(1180px, calc(100% - 8vw)); margin: 2.5rem auto 0; padding: 1rem 0 1.4rem;
+      display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+      border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem;
+    }
 
-    @media (max-width: 900px) {
-      .top-links a.quiet { display: none; }
-      .bridge ol, .panel, .forge-grid, .stat-row, .files { grid-template-columns: 1fr; }
-      .signal { flex-direction: column; align-items: flex-start; }
-      .bridge { padding: 4.5rem 1.3rem; }
-      .panel { width: min(680px, calc(100% - 2rem)); padding: 3rem 0; }
-      .rail { display: none; }
-      .hero { min-height: auto; padding-top: 6.5rem; }
+    @media (max-width: 980px) {
+      .sw-hero, .sw-grid { grid-template-columns: 1fr; }
+      .sw-bar nav a.quiet { display: none; }
+      .sw-mini { grid-template-columns: 1fr 1fr; }
     }
+    @media (max-width: 640px) { .sw-grid, .sw-mini { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .bars i { transform: none; }
-      .checks li { opacity: 1; }
+      .sw-web * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-<body id="top">
-  <a class="skip" href="#features">Skip to the features</a>
-  <div class="scrub" id="scrub" aria-hidden="true"></div>
-  <header class="topbar" id="header">
-    <a class="mark" href="#top">Spend<em>Wise</em></a>
-    <nav class="top-links" aria-label="Page">
-      <a class="quiet" href="#features">Features</a>
-      <a class="quiet" href="#privacy">Privacy</a>
-      <a class="btn slim" id="open-app" href="http://localhost:8523">Open the app</a>
-    </nav>
-  </header>
+<body>
+  <div class="sw-web" id="sw-web">
+    <header class="sw-bar">
+      <a class="sw-mark" href="#top">Spend<em>Wise</em></a>
+      <nav aria-label="Website">
+        <a class="quiet" href="#tour">Tour</a>
+        <a class="quiet" href="#features">All features</a>
+        <a class="sw-btn slim js-app" href="http://localhost:8523/?enter=1">Open the app</a>
+      </nav>
+    </header>
 
-  <main>
-    <section class="hero">
-      <p class="kicker"><span class="dot" aria-hidden="true"></span> Personal spending</p>
-      <h1>
-        <span>See the month</span>
-        <span>that <em>moved</em></span>
-        <span>before you spend.</span>
-      </h1>
-      <p class="lede">Open a six-month fictional demo, or bring your own statement. The app gives you the total, the month that changed, one decision, and four ways to look at the same money.</p>
-      <div class="actions">
-        <a class="btn" href="http://localhost:8523">Open SpendWise</a>
-        <a class="btn ghost" href="#features">See what you get</a>
-      </div>
-      <ul class="spec">
-        <li><a href="#demo">Demo</a></li>
-        <li><a href="#total">Total</a></li>
-        <li><a href="#decision">One decision</a></li>
-        <li><a href="#lenses">Four lenses</a></li>
-        <li><a href="#briefing">Briefing</a></li>
-        <li><a href="#reports">Reports</a></li>
-        <li><a href="#privacy">Masked cards</a></li>
-      </ul>
-    </section>
-
-    <section class="bridge" aria-label="How a visit works">
-      <ol>
-        <li>
-          <span class="num">01</span>
-          <strong>Open</strong>
-          <p>The demo needs no file. A CSV, Excel, or text PDF is there when you want your own month.</p>
-        </li>
-        <li>
-          <span class="num">02</span>
-          <strong>Read</strong>
-          <p>One total, then the change against the previous finished month. A partial month is left out of the average.</p>
-        </li>
-        <li>
-          <span class="num">03</span>
-          <strong>Decide</strong>
-          <p>One next step, then daily spikes, recurring bills, categories, and a report you can keep.</p>
-        </li>
-      </ol>
-      <p class="bridge-note">The figures below are the fictional demo. Your file is read only after you upload it inside the app.</p>
-    </section>
-
-    <section id="features">
-      <article class="panel" id="demo">
+    <main id="top">
+      <section class="sw-hero" id="tour">
         <div>
-          <p class="idx">01 — Start</p>
-          <h2>Two doors. The demo is the fast one.</h2>
-          <p class="body">Explore six fictional months with no personal data, or upload a statement and preview every row before anything is analyzed. A scanned PDF says so if it cannot be read.</p>
-          <p class="go"><a class="btn" href="http://localhost:8523">Explore the demo</a></p>
-        </div>
-        <div class="doors">
-          <a class="door card" href="http://localhost:8523">
-            <em>Start here</em>
-            <strong>Explore the demo</strong>
-            <p>Labeled fictional on every screen. Use it to learn the product before you upload anything.</p>
-          </a>
-          <a class="door card" href="http://localhost:8523">
-            <em>Or bring a file</em>
-            <strong>Upload a statement</strong>
-            <p>CSV, Excel, or a text PDF. You check the read, then continue.</p>
-          </a>
-        </div>
-      </article>
-
-      <article class="panel" id="total">
-        <div>
-          <p class="idx">02 — Total</p>
-          <h2>One number, then the month that deserves a look.</h2>
-          <p class="body">Spending is purchases minus refunds. Income, transfers, and investments stay out of the total. Tap a month in the preview. October is the one that jumped.</p>
-        </div>
-        <div class="card stage-card">
-          <p class="idx">Total spending · fictional demo</p>
-          <p class="figure" id="total-figure">₹0</p>
-          <p class="meta">02 Jun 2026 – 19 Nov 2026. Average of five complete months, ₹96,978.</p>
-          <div class="signal">
-            <div>
-              <span>Since the previous month</span>
-              <b>+96.9%</b>
-            </div>
-            <span>Oct 2026 vs Sep 2026. November is still open, so it is not in this comparison.</span>
+          <p class="sw-kicker">The product, before any file</p>
+          <h1>See every feature.<br>Then <em>open the app.</em></h1>
+          <p class="sw-lede">This page is the tour. The app is the next step, where you explore a fictional demo or upload a statement and read it. Nothing here asks for a file.</p>
+          <div class="sw-actions">
+            <a class="sw-btn js-app" href="http://localhost:8523/?enter=1">Open the app</a>
+            <a class="sw-btn ghost" href="#features">Browse the features</a>
           </div>
-          <div class="bars" id="bars" aria-label="Spending by month">
-            <button type="button" data-month="Jun" data-note="June is a quiet start." style="--h:38%"><i></i><small>Jun</small></button>
-            <button type="button" data-month="Jul" data-note="July stays near the average." style="--h:46%"><i></i><small>Jul</small></button>
-            <button type="button" data-month="Aug" data-note="August is steady." style="--h:44%"><i></i><small>Aug</small></button>
-            <button type="button" data-month="Sep" data-note="September is the month before the jump." style="--h:42%"><i></i><small>Sep</small></button>
-            <button type="button" data-month="Oct" data-note="October almost doubles September. Shopping is the reason." style="--h:100%" aria-pressed="true"><i></i><small>Oct</small></button>
-            <button type="button" data-month="Nov" data-note="November is still open, through 19 Nov, so it is kept out of the average." style="--h:28%"><i></i><small>Nov</small></button>
-          </div>
-          <p class="month-read" id="month-read">October almost doubles September. Shopping is the reason.</p>
+          <p class="sw-note">The figures in the tour are the fictional demo. Your statement is read only after you open the app.</p>
         </div>
-      </article>
-
-      <article class="panel" id="decision">
-        <div>
-          <p class="idx">03 — Decide</p>
-          <h2>One change, before the charts.</h2>
-          <p class="body">Think Before You Spend leads with a single next step. In the demo, shopping is the move: a few thousand rupees in September, then a large October. Rent is large, and it is also expected.</p>
-          <p class="go"><a class="btn ghost" href="http://localhost:8523">Open the decision</a></p>
-        </div>
-        <div class="card stage-card">
-          <p class="idx">The decision</p>
-          <h3 style="font-family:var(--serif);font-weight:560;font-size:1.8rem;letter-spacing:-0.03em;margin:0.3rem 0;">Look at October shopping before the next purchase.</h3>
-          <p class="figure" style="font-size:2.4rem;">₹74,210</p>
-          <p class="meta">Up from ₹2,250 in September. Croma is most of that increase. Rent is ₹1,92,000 across the period, 34.3% of spending, and it repeats.</p>
-        </div>
-      </article>
-
-      <article class="panel" id="lenses">
-        <div>
-          <p class="idx">04 — Lenses</p>
-          <h2>Four questions. Pick one.</h2>
-          <p class="body">Spending Intelligence is not one long chart. Daily shows the spikes. Patterns compare weekends with weekdays. Recurring lists what is likely to leave again. Review flags rows that deserve a second look, without calling them fraud.</p>
-        </div>
-        <div>
-          <div class="lenses" role="tablist" aria-label="Spending lenses">
-            <button type="button" role="tab" id="tab-daily" aria-selected="true" aria-controls="pane-daily">Daily</button>
-            <button type="button" role="tab" id="tab-patterns" aria-selected="false" aria-controls="pane-patterns">Patterns</button>
-            <button type="button" role="tab" id="tab-recurring" aria-selected="false" aria-controls="pane-recurring">Recurring</button>
-            <button type="button" role="tab" id="tab-review" aria-selected="false" aria-controls="pane-review">Review</button>
-          </div>
-          <div class="card stage-card">
-            <div class="lens-pane is-on" id="pane-daily" role="tabpanel" aria-labelledby="tab-daily">
-              <p class="idx">Where the days spiked</p>
-              <p class="body">Each point in the app is that day’s purchases minus refunds. The demo’s tall days sit in October, next to the shopping jump.</p>
+        <div class="sw-stage">
+          <div class="sw-pills" role="tablist" aria-label="Feature tour" id="pills"></div>
+          <div class="sw-device" id="device">
+            <div class="sw-device-top">
+              <span class="sw-live"><i></i> Fictional demo</span>
+              <span class="sw-kicker" id="scene-index" style="margin:0">01</span>
             </div>
-            <div class="lens-pane" id="pane-patterns" role="tabpanel" aria-labelledby="tab-patterns" hidden>
-              <p class="idx">Weekends against weekdays</p>
-              <div class="stat-row">
-                <article class="stat card"><em>Weekend day</em><strong>₹1,119</strong></article>
-                <article class="stat card"><em>Weekday</em><strong>₹121</strong></article>
-                <article class="stat card"><em>Reading</em><strong>Delivery</strong></article>
-              </div>
-              <p class="month-read">Food delivery runs higher on weekends. The app says so in one sentence.</p>
-            </div>
-            <div class="lens-pane" id="pane-recurring" role="tabpanel" aria-labelledby="tab-recurring" hidden>
-              <p class="idx">Likely to leave again</p>
-              <ul class="subs">
-                <li><div><strong>Rent</strong><span>6 times</span></div><b>₹32,000</b></li>
-                <li><div><strong>BESCOM</strong><span>bill</span></div><b>₹2,000</b></li>
-                <li><div><strong>Cult.fit</strong><span>subscription</span></div><b>₹1,499</b></li>
-                <li><div><strong>Netflix</strong><span>with six others, about ₹3,069 a month</span></div><b>₹649</b></li>
-              </ul>
-            </div>
-            <div class="lens-pane" id="pane-review" role="tabpanel" aria-labelledby="tab-review" hidden>
-              <p class="idx">A second look</p>
-              <p class="body">A duplicate is held out of the total. Two rows are marked for a human look. That is a question, not a verdict. You can correct a category in the session.</p>
-            </div>
+            <div id="scenes"></div>
+            <div class="sw-progress" aria-hidden="true"><i id="bar"></i></div>
           </div>
         </div>
-      </article>
+      </section>
 
-      <article class="panel" id="briefing">
-        <div>
-          <p class="idx">05 — Briefing</p>
-          <h2>A paragraph written from the figures.</h2>
-          <p class="body">After the math, a short briefing can be written from those totals. If a number in the paragraph and a card disagree, the card wins. The full statement is not sent.</p>
-        </div>
-        <article class="brief card">
-          <span class="pill">Briefing</span>
-          <h3>Your briefing</h3>
-          <p>Rent is the largest category in the demo, at ₹1,92,000. October spending rose 96.9% from September, and shopping moved from ₹2,250 to ₹74,210. Weekend food delivery averaged ₹1,119 a day. Seven subscriptions recur at about ₹3,069 a month.</p>
-        </article>
-      </article>
+      <section class="sw-atlas" id="features">
+        <p class="sw-kicker">What opens in the app</p>
+        <h2>Sixteen things you can do after you click through.</h2>
+        <p>Pick a card. The tour above moves to that part of the product. Open the app when you want the real screens, including upload.</p>
+        <div class="sw-grid" id="grid"></div>
+      </section>
 
-      <article class="panel" id="reports">
-        <div>
-          <p class="idx">06 — Keep</p>
-          <h2>A report, and the rows behind it.</h2>
-          <p class="body">Categories and merchants explain the total. Transactions let you search and correct a category. Reports export a PDF or Excel of the view you are looking at. Nothing is written to disk on the server.</p>
-          <p class="go"><a class="btn ghost" href="http://localhost:8523">Open reports in the app</a></p>
+      <section class="sw-close" id="open">
+        <p class="sw-kicker">Next step</p>
+        <h2>Open the app<br>and read a month.</h2>
+        <p>The first screen there is the demo and the upload. Analysis starts after you choose one. Card numbers stay masked, and the file is not saved.</p>
+        <div class="sw-actions">
+          <a class="sw-btn js-app" href="http://localhost:8523/?enter=1">Open the app</a>
         </div>
-        <div class="files">
-          <a class="file card" href="http://localhost:8523"><em>PDF</em><strong>The reading</strong><p>Total, the month that moved, and the decision, in one file.</p></a>
-          <a class="file card" href="http://localhost:8523"><em>Excel</em><strong>The rows</strong><p>The same view, ready to filter. Card numbers stay masked.</p></a>
+        <div class="sw-foot">
+          <span>SpendWise</span>
+          <span>Replace the app link with your Streamlit address before publishing this file on its own.</span>
         </div>
-      </article>
-
-      <article class="panel" id="privacy">
-        <div>
-          <p class="idx">07 — Privacy</p>
-          <h2>The statement stays in the visit.</h2>
-          <p class="body">Card numbers, long account numbers, email addresses, and phone numbers are masked before a row is shown, exported, or used in a briefing. This page never receives a statement. The file is not saved.</p>
-        </div>
-        <div class="card stage-card">
-          <p class="idx">What a row becomes</p>
-          <div class="mask-row"><span>Card</span><strong>•••• 4821</strong><span class="kept">Last four</span></div>
-          <div class="mask-row"><span>Email</span><strong>••••@••••</strong><span class="kept">Hidden</span></div>
-          <div class="mask-row"><span>Phone</span><strong>•••• 3210</strong><span class="kept">Last four</span></div>
-          <div class="mask-row"><span>File</span><strong>This session only</strong><span class="kept">Not saved</span></div>
-        </div>
-      </article>
-    </section>
-
-    <section class="forge" id="pack">
-      <div class="forge-grid">
-        <div>
-          <p class="idx">Inside the app</p>
-          <h2>What opens after you click through.</h2>
-          <p class="body">The same screens, with your period filter on every page. Replace the demo whenever you are ready to read a real file.</p>
-        </div>
-        <div>
-          <ol class="checks">
-            <li><span class="tick" aria-hidden="true">✓</span> A fictional demo, labeled as made up</li>
-            <li><span class="tick" aria-hidden="true">✓</span> CSV, Excel, or PDF, with a preview first</li>
-            <li><span class="tick" aria-hidden="true">✓</span> Total, average month, and the largest category</li>
-            <li><span class="tick" aria-hidden="true">✓</span> One decision in Think Before You Spend</li>
-            <li><span class="tick" aria-hidden="true">✓</span> Daily, Patterns, Recurring, and Review</li>
-            <li><span class="tick" aria-hidden="true">✓</span> Categories, merchants, and a written briefing</li>
-            <li><span class="tick" aria-hidden="true">✓</span> PDF and Excel, with card numbers masked</li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <section class="close" id="open">
-      <p class="kicker"><span class="dot" aria-hidden="true"></span> Start with the demo</p>
-      <h2>Open it<br>and see October.</h2>
-      <p class="lede">No account. The demo is one click. Your own statement, when you bring one, stays in that visit.</p>
-      <div class="actions">
-        <a class="btn" href="http://localhost:8523">Open SpendWise</a>
-      </div>
-      <a class="url" href="http://localhost:8523">localhost:8523</a>
-      <footer>
-        <span>SpendWise</span>
-        <span>Change the app links to your Streamlit address before you publish this page.</span>
-        <a href="http://localhost:8523">Open the app</a>
-      </footer>
-    </section>
-  </main>
-
-  <nav class="rail" aria-label="Features">
-    <button type="button" data-jump="demo"><span>Demo</span></button>
-    <button type="button" data-jump="total"><span>Total</span></button>
-    <button type="button" data-jump="decision"><span>Decide</span></button>
-    <button type="button" data-jump="lenses"><span>Lenses</span></button>
-    <button type="button" data-jump="briefing"><span>Briefing</span></button>
-    <button type="button" data-jump="reports"><span>Reports</span></button>
-    <button type="button" data-jump="privacy"><span>Privacy</span></button>
-  </nav>
-
+      </section>
+    </main>
+  </div>
   <script>
-    const header = document.getElementById("header");
-    const scrub = document.getElementById("scrub");
-    const bars = document.getElementById("bars");
-    const totalFigure = document.getElementById("total-figure");
-    const forge = document.querySelector(".forge");
-    const jumps = [...document.querySelectorAll("[data-jump]")];
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let totalPlayed = false;
-    let ticking = false;
+    const scenes = [
+      { id: "demo", label: "Demo", kicker: "Start", title: "Two ways in.", copy: "Explore six fictional months with no file, or upload a CSV, Excel, or text PDF and preview every row before the reading begins.", html: "<div class='sw-mini'><article><em>In the app</em><strong>Explore the demo</strong></article><article><em>In the app</em><strong>Upload a statement</strong></article></div>" },
+      { id: "total", label: "Total", kicker: "Overview", title: "One number for the period.", copy: "Spending is purchases minus refunds. Income, transfers, and investments stay out of it.", html: "<p class='sw-figure' id='fig'>₹5,60,393</p><p>02 Jun 2026 – 19 Nov 2026. Average of five complete months, ₹96,978. Largest category, Rent, ₹1,92,000.</p>" },
+      { id: "month", label: "Month", kicker: "Change", title: "October is the month that moved.", copy: "The comparison uses the last two finished months. November is still open, so it is left out.", html: "<p class='sw-figure sw-up'>+96.9%</p><div class='sw-bars' aria-hidden='true'><span style='--h:38%'></span><span style='--h:46%'></span><span style='--h:44%'></span><span style='--h:42%'></span><span class='on' style='--h:100%'></span><span style='--h:28%'></span></div>" },
+      { id: "decision", label: "Decision", kicker: "Think first", title: "One next step, before the charts.", copy: "Think Before You Spend leads with a single change. In the demo, shopping jumped. Rent is large, and it is also expected.", html: "<p class='sw-figure'>₹74,210</p><p>Shopping, up from ₹2,250 in September. Croma is most of that increase.</p>" },
+      { id: "lenses", label: "Lenses", kicker: "Intelligence", title: "Four questions, one at a time.", copy: "Daily shows the spikes. Patterns compare weekends with weekdays. Recurring lists what is likely to leave again. Review flags rows for a second look, without calling them fraud.", html: "<div class='sw-mini'><article><em>Weekend day</em><strong>₹1,119</strong></article><article><em>Weekday</em><strong>₹121</strong></article><article><em>Subscriptions</em><strong>₹3,069 / mo</strong></article><article><em>Needs a look</em><strong>2 rows</strong></article></div>" },
+      { id: "maps", label: "Maps", kicker: "Categories", title: "Where it went, and who received it.", copy: "Categories explain the total. Merchants show the names behind it. Transactions let you search and correct a category in the session.", html: "<ul class='sw-list'><li><span>Rent &amp; Housing</span><b>34.3%</b></li><li><span>Food delivery, weekends</span><b>₹1,119</b></li><li><span>Held out as a duplicate</span><b>1</b></li></ul>" },
+      { id: "brief", label: "Briefing", kicker: "Written", title: "A paragraph from the figures.", copy: "After the math, a short briefing can be written from those totals. If a sentence and a card disagree, the card wins. The full statement is not sent.", html: "<p style='margin-top:0.8rem'>Rent is the largest category. October rose 96.9% from September. Seven subscriptions recur at about ₹3,069 a month.</p>" },
+      { id: "keep", label: "Keep", kicker: "Reports", title: "Take the reading with you.", copy: "Export a PDF of the reading or Excel of the rows. Card numbers, emails, and phone numbers are already masked. The file is not saved on the server.", html: "<div class='sw-mini'><article><em>PDF</em><strong>The reading</strong></article><article><em>Excel</em><strong>The rows</strong></article><article><em>Card</em><strong>•••• 4821</strong></article><article><em>File</em><strong>This visit only</strong></article></div>" }
+    ];
 
-    function formatInr(value) {
-      return "₹" + Math.round(value).toLocaleString("en-IN");
-    }
+    const features = [
+      ["01", "demo", "Fictional demo", "Six made-up months, labeled as fiction on every screen."],
+      ["02", "demo", "Upload", "CSV, Excel, or a text PDF. A scanned PDF says so if it cannot be read."],
+      ["03", "demo", "Preview the read", "Check columns and amount direction before anything is analyzed."],
+      ["04", "total", "Total spending", "Purchases minus refunds, with income and transfers held out."],
+      ["05", "month", "Month versus month", "The last two finished months. An open month is not averaged in."],
+      ["06", "decision", "One decision", "Think Before You Spend leads with a single next step."],
+      ["07", "lenses", "Daily", "Each day is purchases minus refunds, so spikes are visible."],
+      ["08", "lenses", "Patterns", "Weekend days against weekdays, in one glance."],
+      ["09", "lenses", "Recurring", "Bills and subscriptions likely to leave again next month."],
+      ["10", "lenses", "Review", "Rows that deserve a second look. Not a fraud verdict."],
+      ["11", "maps", "Categories", "The share of spending, and which names sit inside each one."],
+      ["12", "maps", "Merchants", "Who received the money, and how often."],
+      ["13", "maps", "Transactions", "Search, correct a category, or restore a duplicate."],
+      ["14", "brief", "Briefing", "A short paragraph written only from the calculated figures."],
+      ["15", "keep", "PDF and Excel", "Export the view you are looking at. Masking stays in place."],
+      ["16", "keep", "Privacy", "Card numbers, emails, and phones are masked. The file is not stored."]
+    ];
 
-    function playTotal() {
-      if (totalPlayed) return;
-      totalPlayed = true;
-      if (reduceMotion) {
-        totalFigure.textContent = formatInr(560393);
-        bars.classList.add("is-in");
-        return;
-      }
-      const start = performance.now();
-      function tick(now) {
-        const t = Math.min(1, (now - start) / 1100);
-        const eased = 1 - Math.pow(1 - t, 3);
-        totalFigure.textContent = formatInr(560393 * eased);
-        if (t < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-      bars.classList.add("is-in");
-    }
+    const root = document.getElementById("sw-web");
+    const pills = document.getElementById("pills");
+    const mount = document.getElementById("scenes");
+    const indexLabel = document.getElementById("scene-index");
+    const bar = document.getElementById("bar");
+    const grid = document.getElementById("grid");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let current = 0;
+    let timer = null;
 
-    bars.addEventListener("click", (event) => {
-      const button = event.target.closest("button");
-      if (!button) return;
-      bars.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
-      document.getElementById("month-read").textContent = button.dataset.note;
+    scenes.forEach((scene, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = scene.label;
+      button.setAttribute("role", "tab");
+      button.setAttribute("aria-selected", i === 0 ? "true" : "false");
+      button.addEventListener("click", () => { show(i); arm(); });
+      pills.appendChild(button);
+
+      const article = document.createElement("article");
+      article.className = "sw-scene" + (i === 0 ? " is-on" : "");
+      article.innerHTML = "<p class='sw-kicker'>" + scene.kicker + "</p><h2>" + scene.title + "</h2><p>" + scene.copy + "</p>" + scene.html;
+      mount.appendChild(article);
     });
 
-    document.querySelectorAll(".lenses button").forEach((button) => {
+    features.forEach((item) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.innerHTML = "<em>" + item[0] + "</em><strong>" + item[2] + "</strong><span>" + item[3] + "</span>";
       button.addEventListener("click", () => {
-        document.querySelectorAll(".lenses button").forEach((item) => {
-          const on = item === button;
-          item.setAttribute("aria-selected", on ? "true" : "false");
-          const pane = document.getElementById(item.getAttribute("aria-controls"));
-          pane.classList.toggle("is-on", on);
-          pane.hidden = !on;
-        });
+        const scene = scenes.findIndex((entry) => entry.id === item[1]);
+        show(scene);
+        arm();
+        document.getElementById("tour").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        grid.querySelectorAll("button").forEach((el) => el.setAttribute("aria-pressed", el === button ? "true" : "false"));
       });
+      grid.appendChild(button);
     });
 
-    jumps.forEach((button) => {
-      button.addEventListener("click", () => {
-        document.getElementById(button.dataset.jump).scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-      });
-    });
-
-    const sections = jumps.map((button) => document.getElementById(button.dataset.jump));
-    function update() {
-      header.classList.toggle("is-solid", window.scrollY > 12);
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      scrub.style.width = (height > 0 ? (window.scrollY / height) * 100 : 0) + "%";
-      const mark = window.innerHeight * 0.35;
-      let current = 0;
-      sections.forEach((section, index) => {
-        if (section.getBoundingClientRect().top < mark) current = index;
-      });
-      jumps.forEach((button, index) => button.setAttribute("aria-current", index === current ? "true" : "false"));
-      if (document.getElementById("total").getBoundingClientRect().top < window.innerHeight * 0.75) playTotal();
-      if (forge.getBoundingClientRect().top < window.innerHeight * 0.8) forge.classList.add("is-in");
+    function show(i) {
+      current = (i + scenes.length) % scenes.length;
+      mount.querySelectorAll(".sw-scene").forEach((el, n) => el.classList.toggle("is-on", n === current));
+      pills.querySelectorAll("button").forEach((el, n) => el.setAttribute("aria-selected", n === current ? "true" : "false"));
+      indexLabel.textContent = String(current + 1).padStart(2, "0");
+      bar.style.animation = "none";
+      void bar.offsetWidth;
+      bar.style.animation = "";
     }
 
-    window.addEventListener("scroll", () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => { update(); ticking = false; });
-    }, { passive: true });
-    update();
+    function arm() {
+      if (timer) clearInterval(timer);
+      if (reduce) return;
+      timer = setInterval(() => show(current + 1), 4200);
+    }
+
+    document.querySelectorAll(".js-app").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (window.top === window) return;
+        event.preventDefault();
+        window.parent.postMessage("sw-enter", "*");
+      });
+    });
+
+    root.classList.add("is-live");
+    document.getElementById("device").addEventListener("mouseenter", () => { if (timer) clearInterval(timer); });
+    document.getElementById("device").addEventListener("mouseleave", arm);
+    window.addEventListener("scroll", () => root.classList.toggle("is-scrolled", window.scrollY > 8), { passive: true });
+    arm();
   </script>
 </body>
 </html>

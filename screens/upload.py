@@ -28,9 +28,9 @@ def render_upload() -> None:
     st.markdown(
         """
         <div class="sw-hero">
-          <p class="sw-kicker">SpendWise</p>
-          <h1>See where your money goes.</h1>
-          <p class="sw-lead">A quiet reading of a bank or card statement. Start with the fictional demo, or bring your own file. Card numbers are masked before anything is shown, and the file is not saved.</p>
+          <p class="sw-kicker">The app</p>
+          <h1>Read a statement.</h1>
+          <p class="sw-lead">You are past the tour. Explore the fictional demo, or upload a CSV, Excel, or PDF. Card numbers are masked before anything is shown, and the file is not saved.</p>
         </div>
         """,
         unsafe_allow_html=True,

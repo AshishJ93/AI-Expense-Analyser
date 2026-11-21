@@ -84,7 +84,7 @@ PDF support reads tables and, failing that, lines that look like `date descripti
 
 ## Deploy for the public
 
-The introduction people see is the first screen of `app.py`. **Explore the demo** opens fictional data. **Upload a statement** is the path for a real file.
+Opening the app shows the feature tour first. **Open the app** goes to the screen where a visitor explores the fictional demo or uploads a statement. `site/index.html` is that same tour for a separate web page. On that file, change `http://localhost:8523/?enter=1` to your Streamlit address plus `?enter=1` before you publish it. Inside the running app, the button already stays on the app.
 
 1. Push this folder to GitHub. Do not commit `.env` or `.streamlit/secrets.toml`. Both are gitignored. The xAI key stays in Streamlit secrets, not in the repository.
 2. Create an app on [Streamlit Community Cloud](https://streamlit.io/cloud) with main file `app.py`.
