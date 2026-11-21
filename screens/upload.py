@@ -6,7 +6,6 @@ import streamlit as st
 
 from services.file_processor import process_bytes
 from services.pipeline import prepare_transactions
-from services.sample_data import load_sample_bytes
 from services.statement_parser import NOT_IN_FILE, apply_user_mapping
 from utils.formatting import format_date
 from utils.helpers import mask_sensitive
@@ -29,57 +28,24 @@ def render_upload() -> None:
         """
         <div class="sw-hero">
           <p class="sw-kicker">The app</p>
-          <h1>Read a statement.</h1>
-          <p class="sw-lead">You are past the tour. Explore the fictional demo, or upload a CSV, Excel, or PDF. Card numbers are masked before anything is shown, and the file is not saved.</p>
+          <h1>Upload a statement.</h1>
+          <p class="sw-lead">CSV, Excel, or a text PDF. You preview every row before the reading begins. Card numbers, emails, and phone numbers are masked, and the file is not saved.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    demo_col, upload_col = st.columns([1, 1.05], gap="medium")
-    with demo_col:
-        with st.container(key="start_here"):
-            st.markdown(
-                """
-                <p class="sw-kicker">Start here</p>
-                <h2 class="sw-door-title">Explore the demo</h2>
-                <p class="sw-door-copy">Six fictional months. No upload and no personal data. Every screen is labeled as made up.</p>
-                """,
-                unsafe_allow_html=True,
-            )
-            if st.button("Explore the demo", type="primary", width="stretch"):
-                _load_demo()
-            if replacing and st.button("Back to dashboard", width="stretch"):
-                st.session_state.stage = "ready"
-                st.session_state.parsed_files = []
-                st.rerun()
-    with upload_col:
-        with st.container(key="bring_file"):
-            st.markdown(
-                """
-                <p class="sw-kicker">Or bring a file</p>
-                <h2 class="sw-door-title">Upload a statement</h2>
-                <p class="sw-door-copy">CSV, Excel, or a text PDF. Card numbers, emails, and phone numbers are masked and the file is not saved.</p>
-                """,
-                unsafe_allow_html=True,
-            )
-            uploads = st.file_uploader(
-                "Upload a statement",
-                type=["csv", "xlsx", "xls", "pdf"],
-                accept_multiple_files=True,
-                help="CSV, Excel, or a text-based PDF. Card numbers, emails, and phone numbers are masked and are not stored.",
-            )
-            read = st.button("Read statements", disabled=not uploads, width="stretch")
-
-    st.markdown(
-        """
-        <div class="sw-question-grid">
-          <article class="sw-question"><em>01</em><strong>Open the demo</strong><span>Learn the screens on fictional data before you upload anything of your own.</span></article>
-          <article class="sw-question"><em>02</em><strong>Preview the rows</strong><span>Nothing is analyzed until you continue. A scanned PDF says so if it cannot be read.</span></article>
-          <article class="sw-question"><em>03</em><strong>One decision</strong><span>The dashboard leads with the total, the month that moved, and a single next step.</span></article>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    with st.container(key="bring_file"):
+        uploads = st.file_uploader(
+            "Upload a statement",
+            type=["csv", "xlsx", "xls", "pdf"],
+            accept_multiple_files=True,
+            help="CSV, Excel, or a text-based PDF. Card numbers, emails, and phone numbers are masked and are not stored.",
+        )
+        read = st.button("Read statements", type="primary", disabled=not uploads, width="stretch")
+    if replacing and st.button("Back to dashboard", width="stretch"):
+        st.session_state.stage = "ready"
+        st.session_state.parsed_files = []
+        st.rerun()
 
     if read and uploads:
         _read_uploads(uploads)
@@ -95,15 +61,6 @@ def _read_uploads(uploads) -> None:
         outcome = process_bytes(upload.name, upload.getvalue())
         parsed.append(outcome)
     st.session_state.parsed_files = parsed
-
-
-def _load_demo() -> None:
-    outcome = process_bytes("sample_transactions.csv", load_sample_bytes())
-    if outcome.status != "parsed" or outcome.frame is None:
-        st.error(outcome.message)
-        return
-    frame, notes = prepare_transactions([outcome.frame], st.session_state.user_rules, "debit_credit", "INR")
-    _commit(frame, notes, demo=True)
 
 
 def _render_preview(parsed, replacing: bool) -> None:

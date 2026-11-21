@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpendWise — Every feature, before you upload</title>
-  <meta name="description" content="A tour of SpendWise: the demo, the total, the month that moved, one decision, four lenses, categories, merchants, a briefing, and reports. Open the app when you want to upload.">
+  <title>SpendWise — A reading of six fictional months</title>
+  <meta name="description" content="A fictional Bengaluru ledger, June to November 2026. See the total, the month that doubled, the decision, daily spikes, recurring bills, categories, and the briefing. Open the app to upload your own statement.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233F5E4E'/%3E%3Cpath d='M8 18.5c2.2-4 4.2-6 6.2-6s3.2 3.2 5.2 3.2 3.4-5.2 4.6-7.2' fill='none' stroke='%23F7F4EE' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,187 +20,92 @@
     .stApp:has(.sw-web) [data-testid="stMain"] { background: #f4efe6 !important; }
 
     .sw-web {
-      --ink: #1c1b19;
-      --body: #5c564e;
-      --muted: #8a847c;
-      --line: rgba(28, 27, 25, 0.12);
-      --moss: #3f5e4e;
-      --moss-deep: #2c4538;
-      --cream: #fffaf6;
-      --paper: #f4efe6;
-      --up: #8e3b3b;
-      --serif: "Fraunces", Palatino, serif;
-      --sans: "Outfit", "Segoe UI", sans-serif;
-      margin: 0;
-      color: var(--ink);
-      font-family: var(--sans);
+      --ink: #1c1b19; --body: #5c564e; --muted: #8a847c;
+      --line: rgba(28, 27, 25, 0.12); --moss: #3f5e4e; --moss-deep: #2c4538;
+      --cream: #fffaf6; --paper: #f4efe6; --up: #8e3b3b; --good: #2f6b4f;
+      --serif: "Fraunces", Palatino, serif; --sans: "Outfit", "Segoe UI", sans-serif;
+      color: var(--ink); font-family: var(--sans); min-height: 100vh;
       background:
-        radial-gradient(ellipse 46% 34% at 0% 0%, rgba(176, 196, 174, 0.55), transparent 68%),
-        radial-gradient(ellipse 40% 30% at 100% 8%, rgba(236, 214, 176, 0.5), transparent 66%),
+        radial-gradient(ellipse 46% 34% at 0% 0%, rgba(176, 196, 174, 0.5), transparent 68%),
+        radial-gradient(ellipse 40% 30% at 100% 6%, rgba(236, 214, 176, 0.45), transparent 66%),
         var(--paper);
-      min-height: 100vh;
     }
     .sw-web * { box-sizing: border-box; }
-    .sw-web a { color: inherit; }
-    .sw-web button, .sw-web a { font: inherit; }
+    .sw-web a { color: inherit; text-decoration: none; }
+    .sw-web button { font: inherit; }
     .sw-web :focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
-
+    .sw-wrap { width: min(1120px, calc(100% - 8vw)); margin: 0 auto; }
     .sw-bar {
-      position: sticky; top: 0; z-index: 20;
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-      height: 68px; padding: 0 4vw;
-      background: rgba(244, 239, 230, 0.86);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid transparent;
+      position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between;
+      height: 68px; padding: 0 4vw; background: rgba(244, 239, 230, 0.9); backdrop-filter: blur(16px);
     }
-    .sw-web.is-scrolled .sw-bar { border-bottom-color: var(--line); }
-    .sw-mark { text-decoration: none; font-weight: 500; letter-spacing: -0.03em; font-size: 1.05rem; }
+    .sw-mark { font-weight: 500; letter-spacing: -0.03em; font-size: 1.05rem; }
     .sw-mark em { font-family: var(--serif); font-style: italic; color: var(--moss); }
-    .sw-bar nav { display: flex; align-items: center; gap: 0.2rem; }
-    .sw-bar nav a.quiet {
-      text-decoration: none; color: var(--body); padding: 0.45rem 0.7rem; border-radius: 999px; font-size: 0.92rem;
-    }
-    .sw-bar nav a.quiet:hover { background: rgba(28, 27, 25, 0.05); }
     .sw-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      text-decoration: none; background: var(--moss); color: #f7f4ee !important;
-      border-radius: 999px; padding: 0.85rem 1.15rem; border: 1px solid transparent;
-      box-shadow: 0 10px 26px rgba(63, 94, 78, 0.22);
-      transition: transform 0.2s ease, background 0.2s ease;
+      display: inline-flex; align-items: center; background: var(--moss); color: #f7f4ee !important;
+      border-radius: 999px; padding: 0.85rem 1.15rem; box-shadow: 0 10px 26px rgba(63, 94, 78, 0.22);
     }
-    .sw-btn:hover { background: var(--moss-deep); transform: translateY(-1px); }
-    .sw-btn.slim { padding: 0.5rem 0.9rem; box-shadow: none; font-size: 0.92rem; }
-    .sw-btn.ghost {
-      background: transparent; color: var(--ink) !important; border-color: rgba(28, 27, 25, 0.18); box-shadow: none;
-    }
-
-    .sw-hero {
-      display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-      gap: 3vw; align-items: center;
-      width: min(1180px, calc(100% - 8vw));
-      margin: 0 auto; padding: 2.2rem 0 3rem;
-    }
-    .sw-kicker {
-      margin: 0 0 0.9rem; letter-spacing: 0.16em; text-transform: uppercase;
-      font-size: 0.74rem; color: var(--moss); font-weight: 600;
-    }
+    .sw-btn:hover { background: var(--moss-deep); }
+    .sw-btn.slim { padding: 0.5rem 0.95rem; box-shadow: none; font-size: 0.92rem; }
+    .sw-kicker { margin: 0 0 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.74rem; color: var(--moss); font-weight: 600; }
+    .sw-hero { padding: 3.2rem 0 1.2rem; max-width: 46rem; }
     .sw-hero h1 {
       margin: 0; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(3rem, 5.6vw, 5.4rem); line-height: 0.92; letter-spacing: -0.045em;
+      font-size: clamp(3rem, 6.4vw, 5.6rem); line-height: 0.94; letter-spacing: -0.045em;
     }
-    .sw-hero h1 em { font-style: italic; font-weight: 520; color: var(--moss); }
-    .sw-lede { margin: 1.1rem 0 0; max-width: 36rem; color: var(--body); font-weight: 300; font-size: 1.12rem; }
-    .sw-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.4rem; }
-    .sw-note { margin: 0.9rem 0 0; color: var(--muted); font-size: 0.88rem; }
+    .sw-hero h1 em { font-style: italic; color: var(--moss); }
+    .sw-lede { margin: 1.1rem 0 0; color: var(--body); font-weight: 300; font-size: 1.14rem; max-width: 40rem; }
+    .sw-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.4rem; }
+    .sw-note { margin: 0.85rem 0 0; color: var(--muted); font-size: 0.9rem; }
 
-    .sw-stage { min-width: 0; }
-    .sw-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
-    .sw-pills button {
-      border: 1px solid var(--line); background: rgba(255, 250, 246, 0.8); color: var(--ink);
-      border-radius: 999px; padding: 0.42rem 0.72rem; cursor: pointer;
-    }
-    .sw-pills button[aria-selected="true"] { background: var(--ink); color: #f7f4ee; border-color: var(--ink); }
-    .sw-device {
-      background: var(--cream); border: 1px solid var(--line); border-radius: 28px;
-      box-shadow: 0 24px 60px rgba(60, 48, 32, 0.08);
-      padding: 1.15rem 1.2rem 1.2rem; min-height: 360px;
-      transition: transform 0.35s ease;
-    }
-    .sw-device:hover { transform: translateY(-3px); }
-    .sw-device-top { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 0.8rem; }
-    .sw-live {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--moss); font-weight: 600;
-    }
-    .sw-live i {
-      width: 8px; height: 8px; border-radius: 99px; background: var(--moss);
-      animation: sw-pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes sw-pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
-    .sw-scene h2 {
-      margin: 0.15rem 0 0.45rem; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.03em; line-height: 1.05;
-    }
-    .sw-scene p { margin: 0; color: var(--body); font-weight: 300; line-height: 1.5; }
-    .sw-web.is-live .sw-scene { display: none; }
-    .sw-web.is-live .sw-scene.is-on { display: block; animation: sw-in 0.35s ease; }
-    @keyframes sw-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-    .sw-figure {
-      margin: 0.35rem 0 0.2rem; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(2.8rem, 5vw, 4.2rem); letter-spacing: -0.045em; line-height: 0.92;
-    }
-    .sw-up { color: var(--up); }
-    .sw-bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem; align-items: end; height: 120px; margin-top: 1rem; }
-    .sw-bars span { display: block; border-radius: 8px 8px 3px 3px; background: rgba(63, 94, 78, 0.28); height: var(--h); }
-    .sw-bars span.on { background: var(--moss); }
-    .sw-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-top: 0.9rem; }
-    .sw-mini article, .sw-row {
-      background: #f7f3ec; border-radius: 16px; padding: 0.75rem 0.8rem;
-    }
-    .sw-mini em, .sw-row em {
-      display: block; font-style: normal; font-size: 0.68rem; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--muted);
-    }
-    .sw-mini strong { display: block; margin-top: 0.25rem; font-size: 1.05rem; }
-    .sw-list { list-style: none; margin: 0.8rem 0 0; padding: 0; }
-    .sw-list li {
-      display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
-      padding: 0.55rem 0; border-top: 1px solid var(--line);
-    }
-    .sw-list b { font-family: var(--serif); font-weight: 560; }
-    .sw-progress { height: 2px; background: rgba(28, 27, 25, 0.08); margin-top: 1rem; border-radius: 99px; overflow: hidden; }
-    .sw-progress i { display: block; height: 100%; width: 0; background: var(--moss); }
-    .sw-web.is-live .sw-progress i { width: 100%; animation: sw-load 4.2s linear; }
-    @keyframes sw-load { from { width: 0; } to { width: 100%; } }
-
-    .sw-atlas { width: min(1180px, calc(100% - 8vw)); margin: 0 auto; padding: 1rem 0 4rem; }
-    .sw-atlas h2 {
-      font-family: var(--serif); font-weight: 560; font-size: clamp(2.2rem, 4vw, 3.4rem);
-      letter-spacing: -0.04em; margin: 0 0 0.4rem;
-    }
-    .sw-atlas > p { margin: 0 0 1.2rem; color: var(--body); font-weight: 300; max-width: 40rem; }
-    .sw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-    .sw-grid button {
-      text-align: left; cursor: pointer; border: 1px solid var(--line); background: var(--cream);
-      border-radius: 22px; padding: 1rem 1rem 0.95rem; min-height: 168px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .sw-grid button:hover, .sw-grid button[aria-pressed="true"] {
-      transform: translateY(-3px); border-color: rgba(63, 94, 78, 0.45);
-    }
-    .sw-grid em {
-      display: block; font-style: normal; color: var(--moss); font-size: 0.7rem;
-      letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
-    }
-    .sw-grid strong { display: block; margin: 0.4rem 0 0.3rem; font-size: 1.12rem; letter-spacing: -0.02em; }
-    .sw-grid span { display: block; color: var(--body); font-weight: 300; font-size: 0.92rem; line-height: 1.4; }
-
-    .sw-close {
-      text-align: center; padding: 5rem 1.4rem 2rem;
+    .sw-stage { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 14px; margin-top: 2rem; }
+    .sw-card { background: var(--cream); border: 1px solid var(--line); border-radius: 24px; padding: 1.25rem 1.3rem; }
+    .sw-main {
       background:
-        radial-gradient(ellipse 46% 40% at 50% 30%, rgba(176, 196, 174, 0.45), transparent 68%),
-        #efe6da;
+        radial-gradient(90% 120% at 0% 0%, rgba(63, 94, 78, 0.1), transparent 55%),
+        linear-gradient(180deg, #fffaf6, #f3efe6);
     }
-    .sw-close h2 {
-      margin: 0.3rem 0 0.8rem; font-family: var(--serif); font-weight: 560;
-      font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: -0.045em; line-height: 0.95;
-    }
+    .sw-label { color: var(--muted); font-size: 0.75rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; }
+    .sw-figure { margin: 0.35rem 0 0.2rem; font-family: var(--serif); font-weight: 560; font-size: clamp(2.8rem, 5vw, 4.4rem); letter-spacing: -0.045em; line-height: 0.92; }
+    .sw-up { color: var(--up); }
+    .sw-def { margin: 0.4rem 0 0; color: var(--muted); font-weight: 300; line-height: 1.45; }
+    .sw-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+    .sw-rail strong { display: block; margin: 0.35rem 0 0.15rem; font-size: 1.25rem; letter-spacing: -0.03em; }
+    .sw-rail p, .sw-card p { margin: 0; color: var(--body); font-weight: 300; line-height: 1.45; }
+
+    .sw-bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.45rem; align-items: end; height: 132px; margin-top: 1rem; }
+    .sw-bars button { border: 0; background: transparent; padding: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 0.35rem; cursor: pointer; }
+    .sw-bars i { display: block; width: 100%; border-radius: 8px 8px 3px 3px; background: rgba(63, 94, 78, 0.28); height: var(--h); }
+    .sw-bars button[aria-pressed="true"] i { background: var(--moss); }
+    .sw-bars small { color: var(--muted); font-size: 0.7rem; }
+
+    .sw-section { padding: 2.6rem 0 0.4rem; }
+    .sw-section h2 { margin: 0 0 0.45rem; font-family: var(--serif); font-weight: 560; font-size: clamp(2rem, 4vw, 3.1rem); letter-spacing: -0.035em; line-height: 1.05; }
+    .sw-split { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1.4rem; align-items: start; }
+    .sw-lenses { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.8rem; }
+    .sw-lenses button { flex: 1 1 120px; border-radius: 999px; border: 1px solid var(--line); background: var(--cream); padding: 0.55rem 0.7rem; cursor: pointer; }
+    .sw-lenses button[aria-selected="true"] { background: var(--ink); color: #f7f4ee; border-color: var(--ink); }
+    .sw-pane { display: none; }
+    .sw-pane.is-on { display: block; }
+    .sw-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
+    .sw-stats article { background: #f7f3ec; border-radius: 16px; padding: 0.8rem; }
+    .sw-stats em { display: block; font-style: normal; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .sw-stats strong { display: block; margin-top: 0.3rem; font-size: 1.2rem; }
+    .sw-list { list-style: none; margin: 0; padding: 0; }
+    .sw-list li { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; padding: 0.7rem 0; border-top: 1px solid var(--line); }
+    .sw-list b { font-family: var(--serif); font-weight: 560; font-size: 1.2rem; white-space: nowrap; }
+    .sw-list span { display: block; color: var(--muted); font-size: 0.82rem; font-weight: 300; }
+    .sw-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .sw-brief { margin-top: 0.8rem; }
+    .sw-pill { display: inline-flex; border-radius: 999px; padding: 0.16rem 0.55rem; background: rgba(63, 94, 78, 0.12); color: var(--moss); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 650; }
+    .sw-close { text-align: center; padding: 4.5rem 1.2rem 1.4rem; margin-top: 3rem;
+      background: radial-gradient(ellipse 46% 40% at 50% 20%, rgba(176, 196, 174, 0.4), transparent 68%), #efe6da; }
+    .sw-close h2 { margin: 0.2rem 0 0.7rem; font-family: var(--serif); font-weight: 560; font-size: clamp(2.6rem, 5vw, 4.4rem); letter-spacing: -0.04em; line-height: 0.96; }
     .sw-close p { margin: 0 auto; max-width: 34rem; color: var(--body); font-weight: 300; }
     .sw-close .sw-actions { justify-content: center; }
-    .sw-foot {
-      width: min(1180px, calc(100% - 8vw)); margin: 2.5rem auto 0; padding: 1rem 0 1.4rem;
-      display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-      border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem;
-    }
-
-    @media (max-width: 980px) {
-      .sw-hero, .sw-grid { grid-template-columns: 1fr; }
-      .sw-bar nav a.quiet { display: none; }
-      .sw-mini { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 640px) { .sw-grid, .sw-mini { grid-template-columns: 1fr; } }
-    @media (prefers-reduced-motion: reduce) {
-      .sw-web * { animation: none !important; transition: none !important; }
+    .sw-foot { width: min(1120px, calc(100% - 8vw)); margin: 2rem auto 0; padding: 1rem 0 1.3rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; }
+    @media (max-width: 900px) {
+      .sw-stage, .sw-rail, .sw-split, .sw-two, .sw-stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -208,145 +113,181 @@
   <div class="sw-web" id="sw-web">
     <header class="sw-bar">
       <a class="sw-mark" href="#top">Spend<em>Wise</em></a>
-      <nav aria-label="Website">
-        <a class="quiet" href="#tour">Tour</a>
-        <a class="quiet" href="#features">All features</a>
-        <a class="sw-btn slim js-app" href="http://localhost:8523/?enter=1">Open the app</a>
-      </nav>
+      <a class="sw-btn slim js-app" href="http://localhost:8523/?enter=1">Open the app</a>
     </header>
 
     <main id="top">
-      <section class="sw-hero" id="tour">
-        <div>
-          <p class="sw-kicker">The product, before any file</p>
-          <h1>See every feature.<br>Then <em>open the app.</em></h1>
-          <p class="sw-lede">This page is the tour. The app is the next step, where you explore a fictional demo or upload a statement and read it. Nothing here asks for a file.</p>
+      <div class="sw-wrap">
+        <section class="sw-hero">
+          <p class="sw-kicker">Fictional ledger · Jun–Nov 2026</p>
+          <h1>Rent is a third.<br><em>October doubled.</em></h1>
+          <p class="sw-lede">This is the reading of 317 made-up transactions. Spending is ₹5,60,393. The month that deserves a decision is October, up 96.9% from September. Your own statement is read only after you open the app.</p>
           <div class="sw-actions">
             <a class="sw-btn js-app" href="http://localhost:8523/?enter=1">Open the app</a>
-            <a class="sw-btn ghost" href="#features">Browse the features</a>
           </div>
-          <p class="sw-note">The figures in the tour are the fictional demo. Your statement is read only after you open the app.</p>
-        </div>
-        <div class="sw-stage">
-          <div class="sw-pills" role="tablist" aria-label="Feature tour" id="pills"></div>
-          <div class="sw-device" id="device">
-            <div class="sw-device-top">
-              <span class="sw-live"><i></i> Fictional demo</span>
-              <span class="sw-kicker" id="scene-index" style="margin:0">01</span>
+          <p class="sw-note">HDFC ••4821 and ICICI Card ••2290. Nothing here is a real person or a real account.</p>
+        </section>
+
+        <section class="sw-stage" aria-label="The period">
+          <article class="sw-card sw-main">
+            <p class="sw-label">Total spending</p>
+            <p class="sw-figure">₹5,60,393</p>
+            <p class="sw-def">02 Jun 2026 – 19 Nov 2026. Purchases minus refunds. Income, transfers, and investments are not in this number.</p>
+            <div class="sw-bars" id="bars">
+              <button type="button" data-note="June is a quiet start." style="--h:38%"><i></i><small>Jun</small></button>
+              <button type="button" data-note="July stays near the average." style="--h:46%"><i></i><small>Jul</small></button>
+              <button type="button" data-note="August is steady." style="--h:44%"><i></i><small>Aug</small></button>
+              <button type="button" data-note="September is the month before the jump." style="--h:42%"><i></i><small>Sep</small></button>
+              <button type="button" data-note="October almost doubles September. Shopping is the reason." style="--h:100%" aria-pressed="true"><i></i><small>Oct</small></button>
+              <button type="button" data-note="November is still open, through 19 Nov, so it is kept out of the average." style="--h:28%"><i></i><small>Nov</small></button>
             </div>
-            <div id="scenes"></div>
-            <div class="sw-progress" aria-hidden="true"><i id="bar"></i></div>
-          </div>
+            <p class="sw-def" id="month-read">October almost doubles September. Shopping is the reason.</p>
+          </article>
+          <article class="sw-card">
+            <p class="sw-label">Since the previous month</p>
+            <p class="sw-figure sw-up">+96.9%</p>
+            <p class="sw-def">Oct 2026 versus Sep 2026. November is still open, so it is not in this comparison.</p>
+          </article>
+        </section>
+        <div class="sw-rail">
+          <article class="sw-card"><p class="sw-label">Average month</p><strong>₹96,978</strong><p>Average of 5 complete months. The open month is left out.</p></article>
+          <article class="sw-card"><p class="sw-label">Largest category</p><strong>Rent</strong><p>₹1,92,000 · 34.3% of spending, across 6 payments.</p></article>
+          <article class="sw-card"><p class="sw-label">Transactions</p><strong>317</strong><p>296 count toward spending. 1 duplicate is held out. 2 rows need a look.</p></article>
         </div>
-      </section>
 
-      <section class="sw-atlas" id="features">
-        <p class="sw-kicker">What opens in the app</p>
-        <h2>Sixteen things you can do after you click through.</h2>
-        <p>Pick a card. The tour above moves to that part of the product. Open the app when you want the real screens, including upload.</p>
-        <div class="sw-grid" id="grid"></div>
-      </section>
+        <section class="sw-section">
+          <div class="sw-split">
+            <div>
+              <p class="sw-kicker">Think before you spend</p>
+              <h2>Look at October shopping before the next purchase.</h2>
+              <p class="sw-lede" style="margin-top:0.6rem">Shopping moved from ₹2,250 in September to ₹74,210 in October. Croma is ₹64,990 of that increase. Rent is large, and it is also expected.</p>
+            </div>
+            <article class="sw-card">
+              <p class="sw-label">The decision</p>
+              <p class="sw-figure" style="font-size:2.6rem">₹74,210</p>
+              <p>One change, before the charts. Small purchases under ₹500 still add up to ₹29,551 across 130 transactions.</p>
+            </article>
+          </div>
+        </section>
 
-      <section class="sw-close" id="open">
-        <p class="sw-kicker">Next step</p>
-        <h2>Open the app<br>and read a month.</h2>
-        <p>The first screen there is the demo and the upload. Analysis starts after you choose one. Card numbers stay masked, and the file is not saved.</p>
+        <section class="sw-section">
+          <p class="sw-kicker">Spending intelligence</p>
+          <h2>Four ways the same money reads.</h2>
+          <div class="sw-lenses" role="tablist" aria-label="Readings">
+            <button type="button" role="tab" id="tab-daily" aria-selected="true" aria-controls="pane-daily">Daily</button>
+            <button type="button" role="tab" id="tab-patterns" aria-selected="false" aria-controls="pane-patterns">Patterns</button>
+            <button type="button" role="tab" id="tab-recurring" aria-selected="false" aria-controls="pane-recurring">Recurring</button>
+            <button type="button" role="tab" id="tab-review" aria-selected="false" aria-controls="pane-review">Review</button>
+          </div>
+          <article class="sw-card">
+            <div class="sw-pane is-on" id="pane-daily" role="tabpanel">
+              <p class="sw-label">Where the days spiked</p>
+              <p>Each day is purchases minus refunds. The tall days sit in October, next to the shopping jump. A quiet weekday is not the same story as a weekend of delivery.</p>
+            </div>
+            <div class="sw-pane" id="pane-patterns" role="tabpanel" hidden>
+              <p class="sw-label">Weekends against weekdays</p>
+              <div class="sw-stats">
+                <article><em>Weekend day</em><strong>₹1,119</strong></article>
+                <article><em>Weekday</em><strong>₹121</strong></article>
+                <article><em>Reading</em><strong>Delivery</strong></article>
+              </div>
+              <p style="margin-top:0.8rem">Food delivery runs higher on weekends. The comparison is a daily average, so one long Saturday does not pretend to be the whole month.</p>
+            </div>
+            <div class="sw-pane" id="pane-recurring" role="tabpanel" hidden>
+              <p class="sw-label">Likely to leave again</p>
+              <ul class="sw-list">
+                <li><div><strong>Rent</strong><span>6 times · bill</span></div><b>₹32,000</b></li>
+                <li><div><strong>Groww</strong><span>investment · held out of spending</span></div><b>₹15,000</b></li>
+                <li><div><strong>DMart</strong><span>groceries</span></div><b>₹3,900</b></li>
+                <li><div><strong>BESCOM</strong><span>bill</span></div><b>₹2,000</b></li>
+                <li><div><strong>Cult.fit</strong><span>with six other subscriptions, about ₹3,069 a month</span></div><b>₹1,499</b></li>
+                <li><div><strong>Netflix</strong><span>subscription</span></div><b>₹649</b></li>
+              </ul>
+            </div>
+            <div class="sw-pane" id="pane-review" role="tabpanel" hidden>
+              <p class="sw-label">A second look</p>
+              <p>One repeated row is held out of the total. Two rows are marked for a human look. That is a question, not a fraud verdict. In the app, a category can be corrected for the rest of the visit.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="sw-section">
+          <p class="sw-kicker">Categories and merchants</p>
+          <h2>Where it went, and who received it.</h2>
+          <div class="sw-two">
+            <article class="sw-card">
+              <p class="sw-label">Categories</p>
+              <ul class="sw-list">
+                <li><div><strong>Rent &amp; Housing</strong><span>The largest share</span></div><b>34.3%</b></li>
+                <li><div><strong>Shopping</strong><span>Most of the October jump</span></div><b>₹74,210</b></li>
+                <li><div><strong>Food delivery</strong><span>Higher on weekends</span></div><b>₹1,119</b></li>
+              </ul>
+            </article>
+            <article class="sw-card">
+              <p class="sw-label">Merchants</p>
+              <ul class="sw-list">
+                <li><div><strong>Rent</strong><span>Expected, and repeated</span></div><b>₹1,92,000</b></li>
+                <li><div><strong>Croma</strong><span>Inside the October shopping move</span></div><b>₹64,990</b></li>
+                <li><div><strong>BESCOM, Airtel, Act Fiber</strong><span>Bills that return</span></div><b>Monthly</b></li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="sw-section">
+          <p class="sw-kicker">Briefing</p>
+          <h2>A paragraph written from these figures.</h2>
+          <article class="sw-card sw-brief">
+            <span class="sw-pill">From the calculated cards</span>
+            <p style="margin-top:0.8rem">Rent is the largest category, at ₹1,92,000, 34.3% of spending. October rose 96.9% from September, and shopping moved from ₹2,250 to ₹74,210, with Croma at ₹64,990. Weekend food delivery averaged ₹1,119 a day against ₹121 on a weekday. Seven subscriptions recur at about ₹3,069 a month. Purchases under ₹500 add up to ₹29,551. If a sentence and a card ever disagree, the card wins. The full statement is not sent to write this.</p>
+          </article>
+        </section>
+
+        <section class="sw-section">
+          <p class="sw-kicker">In the app</p>
+          <h2>Your file gets the same reading.</h2>
+          <div class="sw-rail">
+            <article class="sw-card"><p class="sw-label">Upload</p><strong>CSV, Excel, PDF</strong><p>You preview every row and the amount direction before anything is analyzed.</p></article>
+            <article class="sw-card"><p class="sw-label">Correct</p><strong>This visit</strong><p>Search a merchant, fix a category, or restore a duplicate. It lasts for the session.</p></article>
+            <article class="sw-card"><p class="sw-label">Keep</p><strong>PDF or Excel</strong><p>Card numbers, emails, and phones are masked. The file is not saved.</p></article>
+          </div>
+        </section>
+      </div>
+
+      <section class="sw-close">
+        <p class="sw-kicker">Your statement</p>
+        <h2>Open the app<br>and upload a file.</h2>
+        <p>The reading above is fictional. The app is where a real statement is uploaded, checked, and analyzed.</p>
         <div class="sw-actions">
           <a class="sw-btn js-app" href="http://localhost:8523/?enter=1">Open the app</a>
         </div>
         <div class="sw-foot">
           <span>SpendWise</span>
-          <span>Replace the app link with your Streamlit address before publishing this file on its own.</span>
+          <span>Change the app link to your Streamlit address before publishing this file on its own.</span>
         </div>
       </section>
     </main>
   </div>
   <script>
-    const scenes = [
-      { id: "demo", label: "Demo", kicker: "Start", title: "Two ways in.", copy: "Explore six fictional months with no file, or upload a CSV, Excel, or text PDF and preview every row before the reading begins.", html: "<div class='sw-mini'><article><em>In the app</em><strong>Explore the demo</strong></article><article><em>In the app</em><strong>Upload a statement</strong></article></div>" },
-      { id: "total", label: "Total", kicker: "Overview", title: "One number for the period.", copy: "Spending is purchases minus refunds. Income, transfers, and investments stay out of it.", html: "<p class='sw-figure' id='fig'>₹5,60,393</p><p>02 Jun 2026 – 19 Nov 2026. Average of five complete months, ₹96,978. Largest category, Rent, ₹1,92,000.</p>" },
-      { id: "month", label: "Month", kicker: "Change", title: "October is the month that moved.", copy: "The comparison uses the last two finished months. November is still open, so it is left out.", html: "<p class='sw-figure sw-up'>+96.9%</p><div class='sw-bars' aria-hidden='true'><span style='--h:38%'></span><span style='--h:46%'></span><span style='--h:44%'></span><span style='--h:42%'></span><span class='on' style='--h:100%'></span><span style='--h:28%'></span></div>" },
-      { id: "decision", label: "Decision", kicker: "Think first", title: "One next step, before the charts.", copy: "Think Before You Spend leads with a single change. In the demo, shopping jumped. Rent is large, and it is also expected.", html: "<p class='sw-figure'>₹74,210</p><p>Shopping, up from ₹2,250 in September. Croma is most of that increase.</p>" },
-      { id: "lenses", label: "Lenses", kicker: "Intelligence", title: "Four questions, one at a time.", copy: "Daily shows the spikes. Patterns compare weekends with weekdays. Recurring lists what is likely to leave again. Review flags rows for a second look, without calling them fraud.", html: "<div class='sw-mini'><article><em>Weekend day</em><strong>₹1,119</strong></article><article><em>Weekday</em><strong>₹121</strong></article><article><em>Subscriptions</em><strong>₹3,069 / mo</strong></article><article><em>Needs a look</em><strong>2 rows</strong></article></div>" },
-      { id: "maps", label: "Maps", kicker: "Categories", title: "Where it went, and who received it.", copy: "Categories explain the total. Merchants show the names behind it. Transactions let you search and correct a category in the session.", html: "<ul class='sw-list'><li><span>Rent &amp; Housing</span><b>34.3%</b></li><li><span>Food delivery, weekends</span><b>₹1,119</b></li><li><span>Held out as a duplicate</span><b>1</b></li></ul>" },
-      { id: "brief", label: "Briefing", kicker: "Written", title: "A paragraph from the figures.", copy: "After the math, a short briefing can be written from those totals. If a sentence and a card disagree, the card wins. The full statement is not sent.", html: "<p style='margin-top:0.8rem'>Rent is the largest category. October rose 96.9% from September. Seven subscriptions recur at about ₹3,069 a month.</p>" },
-      { id: "keep", label: "Keep", kicker: "Reports", title: "Take the reading with you.", copy: "Export a PDF of the reading or Excel of the rows. Card numbers, emails, and phone numbers are already masked. The file is not saved on the server.", html: "<div class='sw-mini'><article><em>PDF</em><strong>The reading</strong></article><article><em>Excel</em><strong>The rows</strong></article><article><em>Card</em><strong>•••• 4821</strong></article><article><em>File</em><strong>This visit only</strong></article></div>" }
-    ];
-
-    const features = [
-      ["01", "demo", "Fictional demo", "Six made-up months, labeled as fiction on every screen."],
-      ["02", "demo", "Upload", "CSV, Excel, or a text PDF. A scanned PDF says so if it cannot be read."],
-      ["03", "demo", "Preview the read", "Check columns and amount direction before anything is analyzed."],
-      ["04", "total", "Total spending", "Purchases minus refunds, with income and transfers held out."],
-      ["05", "month", "Month versus month", "The last two finished months. An open month is not averaged in."],
-      ["06", "decision", "One decision", "Think Before You Spend leads with a single next step."],
-      ["07", "lenses", "Daily", "Each day is purchases minus refunds, so spikes are visible."],
-      ["08", "lenses", "Patterns", "Weekend days against weekdays, in one glance."],
-      ["09", "lenses", "Recurring", "Bills and subscriptions likely to leave again next month."],
-      ["10", "lenses", "Review", "Rows that deserve a second look. Not a fraud verdict."],
-      ["11", "maps", "Categories", "The share of spending, and which names sit inside each one."],
-      ["12", "maps", "Merchants", "Who received the money, and how often."],
-      ["13", "maps", "Transactions", "Search, correct a category, or restore a duplicate."],
-      ["14", "brief", "Briefing", "A short paragraph written only from the calculated figures."],
-      ["15", "keep", "PDF and Excel", "Export the view you are looking at. Masking stays in place."],
-      ["16", "keep", "Privacy", "Card numbers, emails, and phones are masked. The file is not stored."]
-    ];
-
-    const root = document.getElementById("sw-web");
-    const pills = document.getElementById("pills");
-    const mount = document.getElementById("scenes");
-    const indexLabel = document.getElementById("scene-index");
-    const bar = document.getElementById("bar");
-    const grid = document.getElementById("grid");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let current = 0;
-    let timer = null;
-
-    scenes.forEach((scene, i) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = scene.label;
-      button.setAttribute("role", "tab");
-      button.setAttribute("aria-selected", i === 0 ? "true" : "false");
-      button.addEventListener("click", () => { show(i); arm(); });
-      pills.appendChild(button);
-
-      const article = document.createElement("article");
-      article.className = "sw-scene" + (i === 0 ? " is-on" : "");
-      article.innerHTML = "<p class='sw-kicker'>" + scene.kicker + "</p><h2>" + scene.title + "</h2><p>" + scene.copy + "</p>" + scene.html;
-      mount.appendChild(article);
+    const bars = document.getElementById("bars");
+    const note = document.getElementById("month-read");
+    bars.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      bars.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
+      note.textContent = button.dataset.note;
     });
-
-    features.forEach((item) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.innerHTML = "<em>" + item[0] + "</em><strong>" + item[2] + "</strong><span>" + item[3] + "</span>";
+    document.querySelectorAll(".sw-lenses button").forEach((button) => {
       button.addEventListener("click", () => {
-        const scene = scenes.findIndex((entry) => entry.id === item[1]);
-        show(scene);
-        arm();
-        document.getElementById("tour").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-        grid.querySelectorAll("button").forEach((el) => el.setAttribute("aria-pressed", el === button ? "true" : "false"));
+        document.querySelectorAll(".sw-lenses button").forEach((item) => {
+          const on = item === button;
+          item.setAttribute("aria-selected", on ? "true" : "false");
+          const pane = document.getElementById(item.getAttribute("aria-controls"));
+          pane.classList.toggle("is-on", on);
+          pane.hidden = !on;
+        });
       });
-      grid.appendChild(button);
     });
-
-    function show(i) {
-      current = (i + scenes.length) % scenes.length;
-      mount.querySelectorAll(".sw-scene").forEach((el, n) => el.classList.toggle("is-on", n === current));
-      pills.querySelectorAll("button").forEach((el, n) => el.setAttribute("aria-selected", n === current ? "true" : "false"));
-      indexLabel.textContent = String(current + 1).padStart(2, "0");
-      bar.style.animation = "none";
-      void bar.offsetWidth;
-      bar.style.animation = "";
-    }
-
-    function arm() {
-      if (timer) clearInterval(timer);
-      if (reduce) return;
-      timer = setInterval(() => show(current + 1), 4200);
-    }
-
     document.querySelectorAll(".js-app").forEach((link) => {
       link.addEventListener("click", (event) => {
         if (window.top === window) return;
@@ -354,12 +295,6 @@
         window.parent.postMessage("sw-enter", "*");
       });
     });
-
-    root.classList.add("is-live");
-    document.getElementById("device").addEventListener("mouseenter", () => { if (timer) clearInterval(timer); });
-    document.getElementById("device").addEventListener("mouseleave", arm);
-    window.addEventListener("scroll", () => root.classList.toggle("is-scrolled", window.scrollY > 8), { passive: true });
-    arm();
   </script>
 </body>
 </html>
