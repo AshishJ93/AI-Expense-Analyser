@@ -1,4 +1,4 @@
-"""Plotly charts in the SpendWise palette."""
+"""Plotly charts in the HisaabPehle palette."""
 
 import pandas as pd
 import plotly.graph_objects as go

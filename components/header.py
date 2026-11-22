@@ -7,7 +7,7 @@ from config.settings import PERIODS
 
 def render_header(title: str, subtitle: str, source: str) -> None:
     st.markdown(
-        f'<p class="sw-kicker">SpendWise</p>'
+        f'<p class="sw-kicker">HisaabPehle</p>'
         f'<h1 class="sw-page-title">{title}</h1>'
         f'<p class="sw-page-sub">{subtitle}</p>'
         f'<p class="sw-source-line">{source}</p>',

@@ -5,14 +5,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-RULES_PATH = Path(".spendwise") / "merchant_rules.json"
+RULES_PATH = Path(".hisaabpehle") / "merchant_rules.json"
+LEGACY_RULES_PATH = Path(".spendwise") / "merchant_rules.json"
+
+
+def _rules_file() -> Path:
+    if RULES_PATH.exists() or not LEGACY_RULES_PATH.exists():
+        return RULES_PATH
+    return LEGACY_RULES_PATH
 
 
 def load_rules() -> dict:
-    if not RULES_PATH.exists():
+    path = _rules_file()
+    if not path.exists():
         return {}
     try:
-        payload = json.loads(RULES_PATH.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
     if not isinstance(payload, dict):
@@ -26,5 +34,6 @@ def save_rules(rules: dict) -> None:
 
 
 def delete_rules() -> None:
-    if RULES_PATH.exists():
-        RULES_PATH.unlink()
+    for path in (RULES_PATH, LEGACY_RULES_PATH):
+        if path.exists():
+            path.unlink()

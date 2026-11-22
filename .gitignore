@@ -7,6 +7,7 @@ __pycache__/
 .mypy_cache/
 .streamlit/secrets.toml
 .spendwise/
+.hisaabpehle/
 .idea/
 .vscode/
 *.egg-info/

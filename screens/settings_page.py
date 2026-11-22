@@ -15,8 +15,8 @@ def render_settings() -> None:
     st.markdown(
         """
         <div class="sw-note">
-          <p>Statements are processed in this session. SpendWise does not write transaction amounts or narrations to disk.</p>
-          <p>Merchant corrections are saved in <code>.spendwise/merchant_rules.json</code> on the machine running the app, so the same shop is recognized next time. On Streamlit Community Cloud that file lasts only as long as the app container does.</p>
+          <p>Statements are processed in this session. HisaabPehle does not write transaction amounts or narrations to disk.</p>
+          <p>Merchant corrections are saved in <code>.hisaabpehle/merchant_rules.json</code> on the machine running the app, so the same shop is recognized next time. On Streamlit Community Cloud that file lasts only as long as the app container does.</p>
           <p>Card numbers, long account numbers, email addresses, and phone numbers are masked before display. They are not saved, and they are not sent with the briefing.</p>
           <p>Automated analysis can miss a merchant or misread a PDF. It is not a substitute for your bank’s records.</p>
         </div>

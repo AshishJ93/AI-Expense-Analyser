@@ -1,6 +1,6 @@
-# SpendWise AI
+# HisaabPehle
 
-SpendWise is a personal spending desk. You upload a bank or card statement, and it shows where the money went, what is repeating, and which changes are worth a second look.
+HisaabPehle is a personal spending desk. You upload a bank or card statement, and it shows where the money went, what is repeating, and which changes are worth a second look.
 
 The totals, categories, and recommendations are calculated in the app. An AI provider is optional. If you never add a key, the dashboard still works.
 
@@ -52,15 +52,15 @@ Open the local URL Streamlit prints. The first page is the fictional reading. **
 People using the app never enter a key. Copy `.env.example` to `.env` and set it there, or put the same names in `.streamlit/secrets.toml` when you deploy:
 
 ```bash
-SPENDWISE_LLM_PROVIDER=xai
+HISAABPEHLE_LLM_PROVIDER=xai
 XAI_API_KEY=
-SPENDWISE_LLM_BASE_URL=https://api.x.ai/v1
-SPENDWISE_LLM_MODEL=grok-4-1-fast-non-reasoning
+HISAABPEHLE_LLM_BASE_URL=https://api.x.ai/v1
+HISAABPEHLE_LLM_MODEL=grok-4-1-fast-non-reasoning
 ```
 
-`SPENDWISE_LLM_API_KEY` is accepted as well. Do not commit `.env` or `secrets.toml`.
+`HISAABPEHLE_LLM_API_KEY` is accepted as well. Older `SPENDWISE_` names still work. Do not commit `.env` or `secrets.toml`.
 
-When a key is present, SpendWise asks Grok for one paragraph after a statement is analyzed. It sends the insight cards already on screen (totals, category names, and merchant names). It does not send account numbers or the full statement. A briefing that introduces a number which is not in those cards is discarded. Turn this off under Settings.
+When a key is present, HisaabPehle asks Grok for one paragraph after a statement is analyzed. It sends the insight cards already on screen (totals, category names, and merchant names). It does not send account numbers or the full statement. A briefing that introduces a number which is not in those cards is discarded. Turn this off under Settings.
 
 ## How the numbers are defined
 
@@ -74,7 +74,7 @@ When a key is present, SpendWise asks Grok for one paragraph after a statement i
 
 Transaction rows live in the session. They are not written to a database.
 
-Merchant corrections are saved only as merchant name, category, and subcategory in `.spendwise/merchant_rules.json` on the machine running the app. Amounts and narrations are not saved there. Delete them from Settings.
+Merchant corrections are saved only as merchant name, category, and subcategory in `.hisaabpehle/merchant_rules.json` on the machine running the app. Amounts and narrations are not saved there. Delete them from Settings.
 
 Card numbers, long account numbers, email addresses, and phone numbers are masked before a row is shown, exported, or sent into a briefing. The original file is not saved.
 
@@ -92,9 +92,9 @@ Opening the app shows the fictional reading first. **Open the app** goes to the 
 
 ```toml
 XAI_API_KEY = "your-key"
-SPENDWISE_LLM_PROVIDER = "xai"
-SPENDWISE_LLM_BASE_URL = "https://api.x.ai/v1"
-SPENDWISE_LLM_MODEL = "grok-4-1-fast-non-reasoning"
+HISAABPEHLE_LLM_PROVIDER = "xai"
+HISAABPEHLE_LLM_BASE_URL = "https://api.x.ai/v1"
+HISAABPEHLE_LLM_MODEL = "grok-4-1-fast-non-reasoning"
 ```
 
 4. There is no database. Uploaded statements live only in the browser session. Card numbers, long account numbers, email addresses, and phone numbers are masked before they are shown, exported, or used in a briefing. They are not written to disk.

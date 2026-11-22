@@ -82,12 +82,12 @@ def render_transactions() -> None:
     export.to_excel(excel_buffer, index=False)
     first, second = st.columns(2)
     with first:
-        st.download_button("Download this view as CSV", csv_bytes, file_name="spendwise-transactions.csv", mime="text/csv")
+        st.download_button("Download this view as CSV", csv_bytes, file_name="hisaabpehle-transactions.csv", mime="text/csv")
     with second:
         st.download_button(
             "Download this view as Excel",
             excel_buffer.getvalue(),
-            file_name="spendwise-transactions.xlsx",
+            file_name="hisaabpehle-transactions.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 

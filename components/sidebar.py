@@ -9,8 +9,8 @@ def render_sidebar() -> None:
     st.markdown(
         """
         <div class="sw-brand">
-          <div class="sw-logo">S</div>
-          <div class="sw-brand-name">SpendWise <span>AI</span></div>
+          <div class="sw-logo">H</div>
+          <div class="sw-brand-name">Hisaab<span>Pehle</span></div>
         </div>
         """,
         unsafe_allow_html=True,

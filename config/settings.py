@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 
-APP_NAME = "SpendWise AI"
+APP_NAME = "HisaabPehle"
 APP_TAGLINE = "A personal reading of where your money goes."
 
 # Lifestyle spending. Income, transfers, and investments are tracked separately

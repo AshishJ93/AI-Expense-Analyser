@@ -1,4 +1,4 @@
-"""SpendWise AI — personal spending intelligence."""
+"""HisaabPehle — personal spending intelligence."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ import streamlit as st
 
 def main() -> None:
     st.set_page_config(
-        page_title="SpendWise AI",
+        page_title="HisaabPehle",
         page_icon=":material/account_balance_wallet:",
         layout="wide",
         initial_sidebar_state="expanded",

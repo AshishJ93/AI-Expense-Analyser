@@ -330,7 +330,7 @@ def parse_pdf(data: bytes, filename: str) -> ParsedFile:
     return ParsedFile(
         filename,
         "failed",
-        "SpendWise could not find transaction rows in this PDF. Banks format statements very differently. Download the transaction history as CSV or Excel and upload that — it is more accurate than a visual statement.",
+        "HisaabPehle could not find transaction rows in this PDF. Banks format statements very differently. Download the transaction history as CSV or Excel and upload that — it is more accurate than a visual statement.",
         warnings=warnings,
     )
 

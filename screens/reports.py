@@ -49,7 +49,7 @@ def render_reports() -> None:
         st.download_button(
             "Download Excel workbook",
             excel,
-            file_name="spendwise-report.xlsx",
+            file_name="hisaabpehle-report.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             type="primary",
             width="stretch",
@@ -58,7 +58,7 @@ def render_reports() -> None:
         st.download_button(
             "Download PDF report",
             pdf,
-            file_name="spendwise-report.pdf",
+            file_name="hisaabpehle-report.pdf",
             mime="application/pdf",
             width="stretch",
         )

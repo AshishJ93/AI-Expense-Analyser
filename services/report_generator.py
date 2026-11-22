@@ -98,7 +98,7 @@ def build_pdf(
         pdf.set_text_color(28, 25, 23)
 
     pdf.add_page()
-    write("SpendWise AI", size=20, style="B", height=10)
+    write("HisaabPehle", size=20, style="B", height=10)
     write("Personal spending report", size=12, height=7)
     write(f"Prepared {format_date(date.today())} · {kpis.period_label}", size=10)
     if demo:
